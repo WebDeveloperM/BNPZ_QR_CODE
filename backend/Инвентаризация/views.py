@@ -72,5 +72,27 @@ class CoreApiView(APIView):
             compyuters = Compyuter.objects.all()
             serializer = CompyuterSerializer(compyuters, many=True)
             return Response(serializer.data)
+    
+
+class CompDetailApiView(APIView):
+    def get(request, *args, **kwargs):
+            print(request)
+            print(args, 11111)
+            print(kwargs, 22222222)
+            slug = kwargs.get('slug')
+
+            if not slug:
+                return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                compyuter = Compyuter.objects.get(slug=slug)
+                
+            except:
+                return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+            print(compyuter, "55555555555")
+            serializer = CompyuterSerializer(compyuter)
+            return Response(serializer.data)
 
 
