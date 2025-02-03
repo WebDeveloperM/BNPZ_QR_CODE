@@ -64,9 +64,7 @@ const FormLayout = () => {
                   />
                 </div>
 
-                <SelectGroupOne label={"Kalit tanlang"} 
-                // certificates={certificates}
-                />
+                {/* <SelectGroupOne label={"Kalit tanlang"} certificates={certificates}/> */}
 
                 <div className="mb-6">
                   <label className="mb-2.5 block text-black dark:text-white">

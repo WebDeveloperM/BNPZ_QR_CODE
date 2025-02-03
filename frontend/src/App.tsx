@@ -16,6 +16,7 @@ import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import Main from './pages/Dashboard/Main';
+import AddCompyuter from './pages/AddCompyuter/AddCompyuter';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -47,6 +48,15 @@ function App() {
           element={
             <>
               <PageTitle title="Add Compyuter" />
+              <AddCompyuter />
+            </>
+          }
+        />
+          <Route
+          path="/tables"
+          element={
+            <>
+              <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               <Calendar />
             </>
           }

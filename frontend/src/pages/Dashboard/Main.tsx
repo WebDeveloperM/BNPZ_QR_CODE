@@ -1,12 +1,6 @@
 import React from 'react';
 import CardDataStats from '../../components/CardDataStats';
-import ChartOne from '../../components/Charts/ChartOne';
-import ChartThree from '../../components/Charts/ChartThree';
-import ChartTwo from '../../components/Charts/ChartTwo';
-import ChatCard from '../../components/Chat/ChatCard';
-import MapOne from '../../components/Maps/MapOne';
-import TableOne from '../../components/Tables/TableOne';
-import TableTwo from '../../components/Tables/TableTwo';
+import MainTable from '../../components/Tables/MainTable';
 
 const Main: React.FC = () => {
   return (
@@ -99,7 +93,7 @@ const Main: React.FC = () => {
       </div>
 
       <div className='mt-6'>
-        <TableTwo />
+        <MainTable />
       </div>
       
       {/* 

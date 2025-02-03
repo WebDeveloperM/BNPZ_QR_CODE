@@ -2,7 +2,8 @@ import { Compyuter } from '../../types/compyuters';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_IMAGE_URL, BASE_URL } from "../../utils/urls";
-import { ModalComponent } from '../Modal';
+import { ModalComponent } from '../Modal/MainModal/Modal';
+
 
 
 const TableTwo = () => {

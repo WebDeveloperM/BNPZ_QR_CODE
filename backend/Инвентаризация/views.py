@@ -76,9 +76,6 @@ class CoreApiView(APIView):
 
 class CompDetailApiView(APIView):
     def get(request, *args, **kwargs):
-            print(request)
-            print(args, 11111)
-            print(kwargs, 22222222)
             slug = kwargs.get('slug')
 
             if not slug:
@@ -92,5 +89,19 @@ class CompDetailApiView(APIView):
 
             serializer = CompyuterSerializer(compyuter)
             return Response(serializer.data)
+    
+
+class CompDeleteApiView(APIView):
+    def delete(request, *args, **kwargs):
+            slug = kwargs.get('slug')
+            
+            if not slug:
+                return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                Compyuter.objects.get(slug=slug).delete()
+            except:
+                return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+
+            return Response({"message": "Deleted successfully"})
 
 

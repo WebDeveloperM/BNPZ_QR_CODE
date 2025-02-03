@@ -4,8 +4,9 @@
 import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../utils/urls";
-import { Compyuter } from "../types/compyuters";
+import { Compyuter } from "../../../types/compyuters";
+import { BASE_URL } from "../../../utils/urls";
+
 
 type Props = {
     openModal: boolean,
@@ -24,8 +25,6 @@ export function ModalComponent({ openModal, setOpenModal, modalData }: Props) {
             })
             .catch((err) => console.log(err));
     }, [modalData]);
-
-    console.log(data, "2222222222222");
 
     return (
         <>
