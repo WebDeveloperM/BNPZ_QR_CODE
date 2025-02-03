@@ -90,8 +90,6 @@ class CompDetailApiView(APIView):
                 return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
-            print(compyuter, "55555555555")
             serializer = CompyuterSerializer(compyuter)
             return Response(serializer.data)
 

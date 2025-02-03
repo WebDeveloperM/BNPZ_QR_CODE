@@ -29,7 +29,7 @@ export function ModalComponent({ openModal, setOpenModal, modalData }: Props) {
 
     return (
         <>
-            <Modal show={openModal} onClose={() => setOpenModal(false)}>
+            <Modal show={openModal} onClose={() => setOpenModal(false)} className="min-w-[80%]">
                 <Modal.Header>О компьютере</Modal.Header>
                 <Modal.Body>
                     <div className="space-y-6">

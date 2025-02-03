@@ -35,11 +35,19 @@ function App() {
     <DefaultLayout>
       <Routes>
         <Route
-          index
-          element={
+          index element={
             <>
               <PageTitle title="Главная страница" />
               <Main />
+            </>
+          }
+        />
+        <Route
+          path="/add-compyuter"
+          element={
+            <>
+              <PageTitle title="Add Compyuter" />
+              <Calendar />
             </>
           }
         />
