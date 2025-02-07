@@ -37,11 +37,11 @@ export default function SelectGroupOne({ label, certificates }: Props) {
           <option value="" disabled className="text-body dark:text-bodydark">
             Kalitni tanlang
           </option>
-          {certificates?.map((item: object, key: number) => (
+          {/* {certificates?.map((item: object, key: number) => (
             <option value="USA" key={key} className="text-body dark:text-bodydark">
               {item && item.CN}
             </option>
-          ))}
+          ))} */}
 
 
         </select>

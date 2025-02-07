@@ -1,3 +1,9 @@
+
+export type GenericType = {
+    id: number;
+    name: string;
+}
+
 export type Compyuter = {
     id: number;
     departament: {
@@ -57,30 +63,19 @@ export type Compyuter = {
         id: number,
         name: string
     },
-    printer: {
-        id: number,
-        name: string
-    },
-    scaner: {
-        id: number,
-        name: string
-    },
-    type_webcamera: {
-        id: number,
-        name: string
-    },
+
+    printer: GenericType[],
+
+    scaner: GenericType[],
+
+    type_webcamera: GenericType[],
+
     model_webcam: {
         id: number,
         name: string
     },
-    type_monitor: {
-        id: number,
-        name: string
-    },
-    diaganal_monitor: {
-        id: number,
-        name: string
-    },
+    type_monitor: GenericType[],
+    
     seal_number: string,
     user: string,
     ipadresss: string,
@@ -91,5 +86,4 @@ export type Compyuter = {
     slug: string,
     isActive: boolean,
     addedUser: number
-  };
-  
+};

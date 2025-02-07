@@ -98,11 +98,6 @@ class ModelWebCameraSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MonitorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Monitor
-        fields = "__all__"
-
 
 class DiskTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -121,11 +116,6 @@ class MonitorSerializer(serializers.ModelSerializer):
         model = Monitor
         fields = "__all__"
 
-
-class MonitorDiaganalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MonitorDiaganal
-        fields = "__all__"
 
 
 
@@ -149,7 +139,6 @@ class CompyuterSerializer(serializers.ModelSerializer):
     type_webcamera = TypeWebCameraSerializer()
     model_webcam = ModelWebCameraSerializer()
     type_monitor = MonitorSerializer()
-    diaganal_monitor =MonitorDiaganalSerializer()
 
     class Meta:
         model = Compyuter

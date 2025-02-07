@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { TexnologyDataStructure } from '../../../types/texnology';
 
-const SelectGroupTwo: React.FC = () => {
+type Props = {
+  label: string,
+  selectData: TexnologyDataStructure
+}
+
+export default function SelectGroupTwo({ label, selectData }: Props) {
   const [selectedOption, setSelectedOption] = useState<string>('');
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
@@ -11,7 +17,7 @@ const SelectGroupTwo: React.FC = () => {
   return (
     <div>
       <label className="mb-3 block text-black dark:text-white">
-        Select Country
+        {label}
       </label>
 
       <div className="relative z-20 bg-white dark:bg-form-input">
@@ -52,22 +58,16 @@ const SelectGroupTwo: React.FC = () => {
             setSelectedOption(e.target.value);
             changeTextColor();
           }}
-          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
-            isOptionSelected ? 'text-black dark:text-white' : ''
-          }`}
+          className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${isOptionSelected ? 'text-black dark:text-white' : ''
+            }`}
         >
-          <option value="" disabled className="text-body dark:text-bodydark">
-            Select Country
-          </option>
-          <option value="USA" className="text-body dark:text-bodydark">
-            USA
-          </option>
-          <option value="UK" className="text-body dark:text-bodydark">
-            UK
-          </option>
-          <option value="Canada" className="text-body dark:text-bodydark">
-            Canada
-          </option>
+          {selectData.departament?.map((data, key) => (
+            <option value="USA" key={key} className="text-body dark:text-bodydark">
+              {data.name}
+            </option>
+          ))}
+
+
         </select>
 
         <span className="absolute top-1/2 right-4 z-10 -translate-y-1/2">
@@ -91,6 +91,10 @@ const SelectGroupTwo: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
-export default SelectGroupTwo;
+
+
+
+
+

@@ -17,6 +17,8 @@ import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import Main from './pages/Dashboard/Main';
 import AddCompyuter from './pages/AddCompyuter/AddCompyuter';
+import 'antd/dist/reset.css';
+
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);

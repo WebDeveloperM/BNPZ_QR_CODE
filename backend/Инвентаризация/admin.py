@@ -26,12 +26,8 @@ class CompyuterAdmin(admin.ModelAdmin):
         'GPU',
         'ipadresss',
         'mac_adress',
-        'printer',
-        'scaner',
-        'type_webcamera',
         'model_webcam',
         'type_monitor',
-        'diaganal_monitor',
         'qr_image',
         'signature',
         'joinDate',
@@ -63,7 +59,6 @@ class CompyuterAdmin(admin.ModelAdmin):
         'type_webcamera',
         'model_webcam',
         'type_monitor',
-        'diaganal_monitor',
         'slug',
         'isActive'
         )
@@ -93,6 +88,5 @@ admin.site.register(DiskType)
 admin.site.register(RAMType)
 admin.site.register(ModelWebCamera)
 admin.site.register(Monitor)
-admin.site.register(MonitorDiaganal)
 admin.site.register(Printer)
 admin.site.register(Scaner)

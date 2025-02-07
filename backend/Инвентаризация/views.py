@@ -8,7 +8,9 @@ from rest_framework import status
 from .models import *
 from .serializers import *
 
+
 class LoginView(APIView):
+    @staticmethod
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -20,88 +22,88 @@ class LoginView(APIView):
 
 
 class TexnologyApiView(APIView):
+    @staticmethod
     def get(request, *args, **kwargs):
-            departament = DepartmentSerializer(Department.objects.all(), many=True).data
-            warehouse_manager = WarehouseManagerSerializer(WarehouseManager.objects.all(), many=True).data
-            type_compyuter = TypeCompyuterSerializer(TypeCompyuter.objects.all(), many=True).data
-            motherboard = MotherboardModelSerializer(Motherboard.objects.all(), many=True).data
-            motherboard_model = MotherboardModelSerializer(MotherboardModel.objects.all(), many=True).data
-            cpu = CPUSerializer(CPU.objects.all(), many=True).data
-            generation = GenerationSerializer(Generation.objects.all(), many=True).data
-            frequency = FrequencySerializer(Frequency.objects.all(), many=True).data
-            frequency = HDDSerializer(HDD.objects.all(), many=True).data
-            ssd = SSDSerializer(SSD.objects.all(), many=True).data
-            disk_type = DiskTypeSerializer(DiskType.objects.all(), many=True).data
-            ram_type = RAMTypeSerializer(RAMType.objects.all(), many=True).data
-            ram_size = RAMSizeSerializer(RAMSize.objects.all(), many=True).data
-            gpu = GPUSerializer(GPU.objects.all(), many=True).data
-            printer = PrinterSerializer(Printer.objects.all(), many=True).data
-            scaner = ScanerSerializer(Scaner.objects.all(), many=True).data
-            type_webcamera = TypeWebCameraSerializer(TypeWebCamera.objects.all(), many=True).data
-            model_webcam = ModelWebCameraSerializer(ModelWebCamera.objects.all(), many=True).data
-            type_monitor = MonitorSerializer(Monitor.objects.all(), many=True).data
-            diaganal_monitor = MonitorDiaganalSerializer(MonitorDiaganal.objects.all(), many=True).data
+        departament = DepartmentSerializer(Department.objects.all(), many=True).data
+        warehouse_manager = WarehouseManagerSerializer(WarehouseManager.objects.all(), many=True).data
+        type_compyuter = TypeCompyuterSerializer(TypeCompyuter.objects.all(), many=True).data
+        motherboard = MotherboardModelSerializer(Motherboard.objects.all(), many=True).data
+        motherboard_model = MotherboardModelSerializer(MotherboardModel.objects.all(), many=True).data
+        cpu = CPUSerializer(CPU.objects.all(), many=True).data
+        generation = GenerationSerializer(Generation.objects.all(), many=True).data
+        frequency = FrequencySerializer(Frequency.objects.all(), many=True).data
+        hdd = HDDSerializer(HDD.objects.all(), many=True).data
+        ssd = SSDSerializer(SSD.objects.all(), many=True).data
+        disk_type = DiskTypeSerializer(DiskType.objects.all(), many=True).data
+        ram_type = RAMTypeSerializer(RAMType.objects.all(), many=True).data
+        ram_size = RAMSizeSerializer(RAMSize.objects.all(), many=True).data
+        gpu = GPUSerializer(GPU.objects.all(), many=True).data
+        printer = PrinterSerializer(Printer.objects.all(), many=True).data
+        scaner = ScanerSerializer(Scaner.objects.all(), many=True).data
+        type_webcamera = TypeWebCameraSerializer(TypeWebCamera.objects.all(), many=True).data
+        model_webcam = ModelWebCameraSerializer(ModelWebCamera.objects.all(), many=True).data
+        type_monitor = MonitorSerializer(Monitor.objects.all(), many=True).data
 
-            data = {
-                 'departament' : departament,
-                 'warehouse_manager' : warehouse_manager,
-                 'type_compyuter' : type_compyuter,
-                 'motherboard' : motherboard,
-                 'motherboard_model' : motherboard_model,
-                 'cpu' : cpu,
-                 'generation' : generation,
-                 'frequency' : frequency,
-                 'ssd' : ssd,
-                 'disk_type' : disk_type,
-                 'ram_type' : ram_type,
-                 'ram_size' : ram_size,
-                 'gpu' : gpu,
-                 'printer' : printer,
-                 'scaner' : scaner,
-                 'type_webcamera' : type_webcamera,
-                 'model_webcam' : model_webcam,
-                 'type_monitor' : type_monitor,
-                 'diaganal_monitor' : diaganal_monitor,
-            }
-            
-            return Response(data)
-    
+        data = {
+            'departament': departament,
+            'warehouse_manager': warehouse_manager,
+            'type_compyuter': type_compyuter,
+            'motherboard': motherboard,
+            'motherboard_model': motherboard_model,
+            'cpu': cpu,
+            'generation': generation,
+            'frequency': frequency,
+            'hdd': hdd,
+            'ssd': ssd,
+            'disk_type': disk_type,
+            'ram_type': ram_type,
+            'ram_size': ram_size,
+            'gpu': gpu,
+            'printer': printer,
+            'scaner': scaner,
+            'type_webcamera': type_webcamera,
+            'model_webcam': model_webcam,
+            'type_monitor': type_monitor,
+        }
+
+        return Response(data)
+
 
 class CoreApiView(APIView):
+    @staticmethod
     def get(request, *args, **kwargs):
-            compyuters = Compyuter.objects.all()
-            serializer = CompyuterSerializer(compyuters, many=True)
-            return Response(serializer.data)
-    
+        compyuters = Compyuter.objects.all()
+        serializer = CompyuterSerializer(compyuters, many=True)
+        return Response(serializer.data)
+
 
 class CompDetailApiView(APIView):
+    @staticmethod
     def get(request, *args, **kwargs):
-            slug = kwargs.get('slug')
+        slug = kwargs.get('slug')
 
-            if not slug:
-                return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
-            try:
-                compyuter = Compyuter.objects.get(slug=slug)
-                
-            except:
-                return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+        if not slug:
+            return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            compyuter = Compyuter.objects.get(slug=slug)
 
+        except:
+            return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
-            serializer = CompyuterSerializer(compyuter)
-            return Response(serializer.data)
-    
+        serializer = CompyuterSerializer(compyuter)
+        return Response(serializer.data)
+
 
 class CompDeleteApiView(APIView):
+    @staticmethod
     def delete(request, *args, **kwargs):
-            slug = kwargs.get('slug')
-            
-            if not slug:
-                return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
-            try:
-                Compyuter.objects.get(slug=slug).delete()
-            except:
-                return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+        slug = kwargs.get('slug')
 
-            return Response({"message": "Deleted successfully"})
+        if not slug:
+            return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            Compyuter.objects.get(slug=slug).delete()
+        except:
+            return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
-
+        return Response({"message": "Deleted successfully"})

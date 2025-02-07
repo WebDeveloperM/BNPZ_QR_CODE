@@ -4,11 +4,11 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 // import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/e-imzo/logo.png';
 import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
-import { useEImzo } from "react-eimzo-solijonovmuhammadali"
+// import { useEImzo } from "react-eimzo-solijonovmuhammadali"
 import { FaKey } from "react-icons/fa6";
 // import Eimzo from 'react-eimzo-solijonovmuhammadali'
 const SignIn: React.FC = () => {
-  const { certificates, createPkcs7, pkcs7, error } = useEImzo()
+  // const { certificates, createPkcs7, pkcs7, error } = useEImzo()
 
 
   return (
@@ -165,7 +165,7 @@ const SignIn: React.FC = () => {
 
               <form>
 
-                <SelectGroupOne label='Kalit tanlang' certificates={certificates} />
+                {/* <SelectGroupOne label='Kalit tanlang' certificates={certificates} /> */}
 
                 <div className="mb-5">
                   <input
