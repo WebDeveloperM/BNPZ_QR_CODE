@@ -242,7 +242,7 @@ class Compyuter(models.Model):
     scaner = models.ManyToManyField(Scaner, blank=True, verbose_name='Сканеры', related_name="scaner")
     type_webcamera = models.ManyToManyField(TypeWebCamera, blank=True, related_name="typeCamera", verbose_name='Тип вебкамера')
     model_webcam = models.ForeignKey(ModelWebCamera, on_delete=models.CASCADE, default="Нет", verbose_name='Модель вебкамеры', null=True, blank=True)
-    type_monitor = models.ForeignKey(Monitor, on_delete=models.CASCADE, default="Нет", verbose_name='Тип Монитора')
+    type_monitor = models.ManyToManyField(Monitor, blank=True, related_name="typeMonitor", verbose_name='Тип Монитора')
 
     qr_image = models.ImageField(upload_to='qr_codes/', verbose_name='QR-код', null=True, blank=True)
     signature = models.ImageField(upload_to='signature/', verbose_name='Подпись', null=True, blank=True)

@@ -1,6 +1,6 @@
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import AddCompyuterSeleced from '../../components/SelectedGroup/AddCompyuterSeleced';
-import { useEffect, useState } from 'react';
+import { isValidElement, useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/urls';
 import { TexnologyDataStructure } from '../../types/texnology';
@@ -9,6 +9,7 @@ import { FaCopy } from "react-icons/fa";
 import { Compyuter } from '../../types/compyuters';
 import CopyCompyuterSeleced from '../../components/SelectedGroup/CopyCompyuterSeleced';
 import MultySelectTexnology from '../../components/SelectedGroup/MultySelectTexnology';
+import Skeleton from '../../components/Skeleton/Skeleton';
 const AddCompyuter = () => {
   const [data, setData] = useState<TexnologyDataStructure | null>(null)
   const [localData, setLocalData] = useState("")
@@ -50,29 +51,11 @@ const AddCompyuter = () => {
   const [diaganal_monitor, setDiaganalMonitorId] = useState<number | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
 
+
+  console.log(
+    
+  );
   
-  // console.log(
-  //   seal_number,
-  //   departament,
-  //   selectedWarehouseManagerId, 
-  //   selectedTypeCompyuterId,
-  //   selectedMotherboardId,
-  //   selectedMotherboardModelId,
-  //   cpuId,
-  //   generationId,
-  //   frequencyId,
-  //   hddId,
-  //   ssdId,
-  //   ramTypeId,
-  //   ramSizeId,
-  //   gpuId,
-  //   printerId,
-  //   scanerId,
-  //   typeWebcameraId,
-  //   modelWebcamId,
-  //   typeMonitorId,
-  //   diaganalMonitorId
-  // );
 
   useEffect(() => {
     axios
@@ -92,6 +75,7 @@ const AddCompyuter = () => {
 
 
   useEffect(() => {
+    if (!selectedCompyuterId) return;
     axios
       .get(`${BASE_URL}/comp_detail/${selectedCompyuterId}`)
       .then((response) => {
@@ -99,6 +83,7 @@ const AddCompyuter = () => {
       })
       .catch((err) => console.log(err));
   }, [selectedCompyuterId]);
+
 
   useEffect(() => {
     setLocalData(data?.departament.find(x => x.id == Number(departament))?.boss_fullName as unknown as string)
@@ -124,269 +109,165 @@ const AddCompyuter = () => {
               </button>
             </div>
 
-            <div className={`mx-5 mt-4  ${openCopyTab ? "block" : "hidden"} `}>
-              {data && <CopyCompyuterSeleced label='Выберите компьютер' compyuterData={compyuterData} setSelectedCopyuterId={setSelectedCopyuterId} />}
-            </div>
+            {
+              data ?
+                <div>
+                  <div className={`mx-5 mt-4  ${openCopyTab ? "block" : "hidden"} `}>
+                    {data && <CopyCompyuterSeleced label='Выберите компьютер' compyuterData={compyuterData} setSelectedCopyuterId={setSelectedCopyuterId} />}
+                  </div>
 
-            {/* {selectedCompyuterId != null ? */}
-            <div className="grid grid-cols-12 gap-4 p-5 py-3 pb-5">
-              <div className='col-span-3'>
-                <label className="mb-3 block text-black dark:text-white">
-                  Номер пломбы
-                </label>
-                <input
-                  type="text"
-                  onChange={(e) => console.log(e.target.value, "22222222222222")}
-                  placeholder="Номер пломбы"
-                  className="w-full rounded-md border-stroke bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSeleced label='Цех' selectData={data} setSelectedUser={setSelectedUser} />}
-              </div>
-              <div className='col-span-3'>
-                <label className="mb-3 block text-black dark:text-white">
-                  Пользователь
-                </label>
-                <input
-                  type="text"
-                  placeholder="Пользователь"
-                  className="w-full rounded-md border-stroke bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
-              <div className='col-span-3'>
-                <label className="mb-3 block text-black dark:text-white">
-                  Руководитель подразделения
-                </label>
-                <input
-                  value={localData}
-                  disabled
-                  type="text"
-                  placeholder="Руководитель подразделения"
-                  className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
+                  {/* {selectedCompyuterId != null ? */}
+                  <div className="grid grid-cols-12 gap-4 p-5 py-3 pb-5">
+                    <div className='col-span-3'>
+                      <label className="mb-3 block text-black dark:text-white">
+                        Номер пломбы
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => console.log(e.target.value, "22222222222222")}
+                        placeholder="Номер пломбы"
+                        className="w-full rounded-md border-stroke bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSeleced label='Цех' selectData={data} setSelectedUser={setSelectedUser} />}
+                    </div>
+                    <div className='col-span-3'>
+                      <label className="mb-3 block text-black dark:text-white">
+                        Пользователь
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Пользователь"
+                        className="w-full rounded-md border-stroke bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
+                    <div className='col-span-3'>
+                      <label className="mb-3 block text-black dark:text-white">
+                        Руководитель подразделения
+                      </label>
+                      <input
+                        value={localData}
+                        disabled
+                        type="text"
+                        placeholder="Руководитель подразделения"
+                        className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
 
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Зав. склад' selectData={data.warehouse_manager} selectedTexnologyId={setSelectedWarehouseManagerId} selectedIdComp={compyuterDetailData?.warehouse_manager.id} />}
-              </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Зав. склад' selectData={data.warehouse_manager} selectedTexnologyId={setSelectedWarehouseManagerId} selectedIdComp={compyuterDetailData?.warehouse_manager.id} />}
+                    </div>
 
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Тип орг.техники' selectData={data.type_compyuter} selectedTexnologyId={setSelectedTypeCompyuterId} selectedIdComp={compyuterDetailData?.type_compyuter.id} />}
-              </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Тип орг.техники' selectData={data.type_compyuter} selectedTexnologyId={setSelectedTypeCompyuterId} selectedIdComp={compyuterDetailData?.type_compyuter.id} />}
+                    </div>
 
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Производитель МП' selectData={data.motherboard} selectedTexnologyId={setSelectedMotherboardId} selectedIdComp={compyuterDetailData?.motherboard.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data &&
-                  <AddCompyuterSelecedTexnology label='Модель МП'
-                    selectData={data.motherboard_model}
-                    selectedTexnologyId={setSelectedMotherboardModelId}
-                    selectedIdComp={compyuterDetailData?.motherboard_model.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Процессор' selectData={data.cpu} selectedTexnologyId={setCPUId} selectedIdComp={compyuterDetailData?.CPU.id} />}
-              </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Производитель МП' selectData={data.motherboard} selectedTexnologyId={setSelectedMotherboardId} selectedIdComp={compyuterDetailData?.motherboard.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data &&
+                        <AddCompyuterSelecedTexnology label='Модель МП'
+                          selectData={data.motherboard_model}
+                          selectedTexnologyId={setSelectedMotherboardModelId}
+                          selectedIdComp={compyuterDetailData?.motherboard_model.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Процессор' selectData={data.cpu} selectedTexnologyId={setCPUId} selectedIdComp={compyuterDetailData?.CPU.id} />}
+                    </div>
 
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Поколение процессора' selectData={data.generation} selectedTexnologyId={setGenerationId} selectedIdComp={compyuterDetailData?.generation.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Частота процессора' selectData={data.frequency} selectedTexnologyId={setFrequencyId} selectedIdComp={compyuterDetailData?.frequency.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Диск  HDD' selectData={data.hdd} selectedTexnologyId={setHddId} selectedIdComp={compyuterDetailData?.HDD.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Диск  SSD' selectData={data.ssd} selectedTexnologyId={setSsdId} selectedIdComp={compyuterDetailData?.SSD.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Тип диска' selectData={data.disk_type} selectedTexnologyId={setDiskTypeId} selectedIdComp={compyuterDetailData?.disk_type.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Тип оперативки' selectData={data.ram_type} selectedTexnologyId={setRamTypeId} selectedIdComp={compyuterDetailData?.RAM_type.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Размер оперативной памяти' selectData={data.ram_size} selectedTexnologyId={setRamSizeId} selectedIdComp={compyuterDetailData?.RAMSize.id} />}
-              </div>
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Видеокарта' selectData={data.gpu} selectedTexnologyId={setGpuId} selectedIdComp={compyuterDetailData?.GPU.id} />}
-              </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Поколение процессора' selectData={data.generation} selectedTexnologyId={setGenerationId} selectedIdComp={compyuterDetailData?.generation.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Частота процессора' selectData={data.frequency} selectedTexnologyId={setFrequencyId} selectedIdComp={compyuterDetailData?.frequency.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Диск  HDD' selectData={data.hdd} selectedTexnologyId={setHddId} selectedIdComp={compyuterDetailData?.HDD.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Диск  SSD' selectData={data.ssd} selectedTexnologyId={setSsdId} selectedIdComp={compyuterDetailData?.SSD.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Тип диска' selectData={data.disk_type} selectedTexnologyId={setDiskTypeId} selectedIdComp={compyuterDetailData?.disk_type.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Тип оперативки' selectData={data.ram_type} selectedTexnologyId={setRamTypeId} selectedIdComp={compyuterDetailData?.RAM_type.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Размер оперативной памяти' selectData={data.ram_size} selectedTexnologyId={setRamSizeId} selectedIdComp={compyuterDetailData?.RAMSize.id} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Видеокарта' selectData={data.gpu} selectedTexnologyId={setGpuId} selectedIdComp={compyuterDetailData?.GPU.id} />}
+                    </div>
 
-              <div className='col-span-3'>
-                <label className="mb-3 block text-black dark:text-white">
-                  IPv4 адрес
-                </label>
-                <input
-                  type="text"
-                  onChange={e => setIpAddressId(e.target.value)}
-                  placeholder="IPv4 адрес"
-                  className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
+                    <div className='col-span-3'>
+                      <label className="mb-3 block text-black dark:text-white">
+                        IPv4 адрес
+                      </label>
+                      <input
+                        type="text"
+                        onChange={e => setIpAddressId(e.target.value)}
+                        placeholder="IPv4 адрес"
+                        className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
 
-              <div className='col-span-3'>
-                <label className="mb-3 block text-black dark:text-white">
-                  Физический(MAC) адрес
-                </label>
-                <input
-                  type="text"
-                  onChange={e => setMacAddressId(e.target.value)}
-                  placeholder="Физический(MAC) адрес"
-                  className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
+                    <div className='col-span-3'>
+                      <label className="mb-3 block text-black dark:text-white">
+                        Физический(MAC) адрес
+                      </label>
+                      <input
+                        type="text"
+                        onChange={e => setMacAddressId(e.target.value)}
+                        placeholder="Физический(MAC) адрес"
+                        className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      />
+                    </div>
 
-              <div className='col-span-3'>
-                {data && <MultySelectTexnology label='Принтер' selectData={data.printer} selectedTexnologyId={setPrinterId} selectedIdComp={compyuterDetailData?.printer} />}                
-              </div>
-              <div className='col-span-3'>
-                {data && <MultySelectTexnology label='Сканер' selectData={data.scaner} selectedTexnologyId={setScanerId} selectedIdComp={compyuterDetailData?.scaner} />}                
-              </div>
-              <div className='col-span-3'>
-                {data && <MultySelectTexnology label='Тип вебкамера' selectData={data.type_webcamera} selectedTexnologyId={setTypeWebcameraId} selectedIdComp={compyuterDetailData?.type_webcamera} />}                
-              </div>
-
-     
-              <div className='col-span-3'>
-                {data && <AddCompyuterSelecedTexnology label='Модель вебкамеры' selectData={data.model_webcam} selectedTexnologyId={setModelWebcamId} selectedIdComp={compyuterDetailData?.model_webcam.id} />}
-              </div>
-
-              <div className='col-span-3'>
-                {data && <MultySelectTexnology label='Тип Монитора' selectData={data.type_monitor} selectedTexnologyId={setTypeMonitorId} selectedIdComp={compyuterDetailData?.type_webcamera} />}                
-              </div>
-            
-        
-
-            </div>
-            {/* :
-              <div className="grid grid-cols-12 gap-4 p-5 py-3 pb-5">
-                <div className='col-span-3'>
-                  <label className="mb-3 block text-black dark:text-white">
-                    Номер пломбы
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Номер пломбы"
-                    className="w-full rounded-md border-stroke bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSeleced label='Цех' selectData={data} setSelectedUser={setSelectedUser} />}
-                </div>
-                <div className='col-span-3'>
-                  <label className="mb-3 block text-black dark:text-white">
-                    Пользователь
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Пользователь"
-                    className="w-full rounded-md border-stroke bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-                <div className='col-span-3'>
-                  <label className="mb-3 block text-black dark:text-white">
-                    Руководитель подразделения
-                  </label>
-                  <input
-                    value={localData}
-                    disabled
-                    type="text"
-                    placeholder="Руководитель подразделения"
-                    className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Зав. склад' selectData={data.warehouse_manager} selectedTexnologyId={setSelectedWarehouseManagerId} selectedIdComp={compyuterDetailData?.warehouse_manager.id} />}
-                </div>
-
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Тип орг.техники' selectData={data.type_compyuter} selectedTexnologyId={setSelectedTypeCompyuterId} selectedIdComp={compyuterDetailData?.type_compyuter.id} />}
-                </div>
-
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Производитель МП' selectData={data.motherboard} selectedTexnologyId={setSelectedMotherboardId} selectedIdComp={compyuterDetailData?.motherboard.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data &&
-                    <AddCompyuterSelecedTexnology label='Модель МП'
-                      selectData={data.motherboard_model}
-                      selectedTexnologyId={setSelectedMotherboardModelId}
-                      selectedIdComp={compyuterDetailData?.motherboard_model.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Процессор' selectData={data.cpu} selectedTexnologyId={setCPUId} selectedIdComp={compyuterDetailData?.CPU.id} />}
-                </div>
-
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Поколение процессора' selectData={data.generation} selectedTexnologyId={setGenerationId} selectedIdComp={compyuterDetailData?.generation.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Частота процессора' selectData={data.frequency} selectedTexnologyId={setFrequencyId} selectedIdComp={compyuterDetailData?.frequency.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Диск  HDD' selectData={data.hdd} selectedTexnologyId={setHddId} selectedIdComp={compyuterDetailData?.HDD.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Диск  SSD' selectData={data.ssd} selectedTexnologyId={setSsdId} selectedIdComp={compyuterDetailData?.SSD.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Тип оперативки' selectData={data.ram_type} selectedTexnologyId={setRamTypeId} selectedIdComp={compyuterDetailData?.RAM_type.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Размер оперативной памяти' selectData={data.ram_size} selectedTexnologyId={setRamSizeId} selectedIdComp={compyuterDetailData?.RAMSize.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Видеокарта' selectData={data.gpu} selectedTexnologyId={setGpuId} selectedIdComp={compyuterDetailData?.GPU.id} />}
-                </div>
-
-                <div className='col-span-3'>
-                  <label className="mb-3 block text-black dark:text-white">
-                    IPv4 адрес
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="IPv4 адрес"
-                    className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-
-                <div className='col-span-3'>
-                  <label className="mb-3 block text-black dark:text-white">
-                    Физический(MAC) адрес
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Физический(MAC) адрес"
-                    className="w-full rounded-md border-stroke  bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Принтер' selectData={data.printer} selectedTexnologyId={setPrinterId} selectedIdComp={compyuterDetailData?.printer.id} />}
-                </div>
-
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Сканер' selectData={data.scaner} selectedTexnologyId={setScanerId} selectedIdComp={compyuterDetailData?.scaner.id} />}
-                </div>
-
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Тип вебкамера' selectData={data.type_webcamera} selectedTexnologyId={setTypeWebcameraId} selectedIdComp={compyuterDetailData?.type_webcamera.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Модель вебкамеры' selectData={data.model_webcam} selectedTexnologyId={setModelWebcamId} selectedIdComp={compyuterDetailData?.model_webcam.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Тип Монитора' selectData={data.type_monitor} selectedTexnologyId={setTypeMonitorId} selectedIdComp={compyuterDetailData?.type_monitor.id} />}
-                </div>
-                <div className='col-span-3'>
-                  {data && <AddCompyuterSelecedTexnology label='Диаганал Монитора' selectData={data.diaganal_monitor} selectedTexnologyId={setDiaganalMonitorId} selectedIdComp={compyuterDetailData?.diaganal_monitor.id} />}
-                </div>
+                    <div className='col-span-3'>
+                      {data && <MultySelectTexnology label='Принтер' selectData={data.printer} selectedTexnologyId={setPrinterId} selectedIdComp={compyuterDetailData?.printer} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <MultySelectTexnology label='Сканер' selectData={data.scaner} selectedTexnologyId={setScanerId} selectedIdComp={compyuterDetailData?.scaner} />}
+                    </div>
+                    <div className='col-span-3'>
+                      {data && <MultySelectTexnology label='Тип вебкамера' selectData={data.type_webcamera} selectedTexnologyId={setTypeWebcameraId} selectedIdComp={compyuterDetailData?.type_webcamera} />}
+                    </div>
 
 
-              </div>} */}
+                    <div className='col-span-3'>
+                      {data && <AddCompyuterSelecedTexnology label='Модель вебкамеры' selectData={data.model_webcam} selectedTexnologyId={setModelWebcamId} selectedIdComp={compyuterDetailData?.model_webcam.id} />}
+                    </div>
+
+                    <div className='col-span-3'>
+                      {data && <MultySelectTexnology label='Тип Монитора' selectData={data.type_monitor} selectedTexnologyId={setTypeMonitorId} selectedIdComp={compyuterDetailData?.type_webcamera} />}
+                    </div>
+
+
+
+                  </div>
+
+                </div> :
+
+                <div className='grid grid-cols-12'>
+                  <div className='col-span-3 '>
+                    <Skeleton />
+                  </div>
+                  <div className='col-span-3 '>
+                    <Skeleton />
+                  </div>
+                  <div className='col-span-3 '>
+                    <Skeleton />
+                  </div>
+                  <div className='col-span-3 '>
+                    <Skeleton />
+                  </div>
+
+                </div>
+
+            }
 
           </div>
         </div>

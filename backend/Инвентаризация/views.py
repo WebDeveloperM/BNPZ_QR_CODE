@@ -86,6 +86,7 @@ class CompDetailApiView(APIView):
             return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
         try:
             compyuter = Compyuter.objects.get(slug=slug)
+            print(compyuter, "111111111111111")
 
         except:
             return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)

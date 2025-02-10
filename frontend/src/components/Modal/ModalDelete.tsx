@@ -5,8 +5,8 @@ import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 import { BASE_URL } from "../../utils/urls";
-import alert from "../../images/alert.png"
 
+import { FiAlertTriangle } from "react-icons/fi";
 
 type Props = {
     openDeleteModal: boolean,
@@ -43,7 +43,7 @@ export function ModalDeleteComponent({ openDeleteModal, setDeleteOpenModal, dele
                 <Modal.Body>
                     <div className="space-y-2">
                         <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 flex justify-center">
-                            <img src={alert} alt="" className="w-20 h-20 " />
+                            <FiAlertTriangle className="w-20 h-20 text-red-500" />
                         </p>
                         <p className="text-base leading-relaxed text-gray-500 text-center dark:text-gray-400">
                             Вы уверены, что хотите удалить этот компьютер из базы данных?

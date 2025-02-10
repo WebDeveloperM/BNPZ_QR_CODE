@@ -56,15 +56,13 @@ type Props = {
 };
 
 export default function ModalMultySelectInputTexnology({ label, selectedIdComp }: Props) {
-    const options = Array.isArray(selectedIdComp)
-        ? selectedIdComp.map(item => ({
-            label: item.name,
-            value: item.id
-        }))
+
+    const defaultValues = Array.isArray(selectedIdComp)
+        ? selectedIdComp.map(option => option.name)
         : [];
 
     // ✅ Tanlangan (default) qiymatlar
-    const defaultValues = options.map(option => option.value);
+    // const defaultValues = selectedIdComp.map(option => option.value);
 
     return (
         <Space style={{ width: '100%' }} direction="vertical">
@@ -77,7 +75,7 @@ export default function ModalMultySelectInputTexnology({ label, selectedIdComp }
                 placeholder={label}
                 showSearch
                 optionFilterProp="label"
-                options={options}
+                disabled
                 defaultValue={defaultValues} // ✅ Tanlangan qiymatlar
             />
         </Space>

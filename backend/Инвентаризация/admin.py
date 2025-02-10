@@ -27,7 +27,6 @@ class CompyuterAdmin(admin.ModelAdmin):
         'ipadresss',
         'mac_adress',
         'model_webcam',
-        'type_monitor',
         'qr_image',
         'signature',
         'joinDate',

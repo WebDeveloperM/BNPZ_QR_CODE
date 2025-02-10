@@ -134,11 +134,11 @@ class CompyuterSerializer(serializers.ModelSerializer):
     RAM_type = RAMTypeSerializer()
     RAMSize =  RAMSizeSerializer()
     GPU = GPUSerializer()
-    printer = PrinterSerializer()
-    scaner = ScanerSerializer()
-    type_webcamera = TypeWebCameraSerializer()
+    printer = PrinterSerializer(many=True, read_only=True)
+    scaner = ScanerSerializer(many=True, read_only=True)
+    type_webcamera = TypeWebCameraSerializer(many=True, read_only=True)
     model_webcam = ModelWebCameraSerializer()
-    type_monitor = MonitorSerializer()
+    type_monitor = MonitorSerializer(many=True, read_only=True)
 
     class Meta:
         model = Compyuter

@@ -20,6 +20,8 @@ export function ModalComponent({ openModal, setOpenModal, modalData }: Props) {
     const [data, setData] = useState<Compyuter>()
 
     useEffect(() => {
+        if (!modalData) return; // Agar modalData yo'q bo'lsa, useEffect ishlamasin
+
         axios
             .get(`${BASE_URL}/comp_detail/${modalData}`)
             .then((response) => {
@@ -81,17 +83,23 @@ export function ModalComponent({ openModal, setOpenModal, modalData }: Props) {
 
                                 {data && <ModalDataInput label="Физический(MAC) адрес" inputData={data.mac_adress} />}
 
-                                {data && <ModalMultySelectInputTexnology label="Принтер" selectedIdComp={data.printer} />}
+                                <div className='col-span-3'>
+                                    {data && <ModalMultySelectInputTexnology label="Принтер" selectedIdComp={data.printer} />}
+                                </div>
+                                <div className='col-span-3'>
+                                    {data && <ModalMultySelectInputTexnology label="Сканер" selectedIdComp={data.scaner} />}
+                                </div>
 
-                                {/* {data && <ModalMultySelectInputTexnology label="Сканер" selectedIdComp={data.scaner} />} */}
-
-                                {/* {data && <ModalMultySelectInputTexnology label="Тип вебкамера" selectedIdComp={data.type_webcamera} />} */}
+                                <div className='col-span-3'>
+                                    {data && <ModalMultySelectInputTexnology label="Тип вебкамера" selectedIdComp={data.type_webcamera} />}
+                                </div>
 
                                 {data && <ModalDataInput label="Модель вебкамеры" inputData={data.model_webcam.name} />}
 
-                                {/* {data && <ModalMultySelectInputTexnology label="Тип Монитора" selectedIdComp={data.type_monitor} />} */}
+                                <div className='col-span-3'>
+                                    {data && <ModalMultySelectInputTexnology label="Тип Монитора" selectedIdComp={data.type_monitor} />}
+                                </div>
 
-                    
 
 
                             </div>
