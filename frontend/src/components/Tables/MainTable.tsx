@@ -1,11 +1,9 @@
 import { Compyuter } from '../../types/compyuters';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { BASE_IMAGE_URL, BASE_URL } from "../../utils/urls";
-
 import { ModalDeleteComponent } from '../Modal/ModalDelete';
 import { ModalComponent } from '../Modal/Modal';
-import Skeleton from '../Skeleton/Skeleton';
+import axioss from '../../api/axios';
 
 
 const MainTable = () => {
@@ -18,7 +16,7 @@ const MainTable = () => {
   const [deleteCompData, setDeleteCompData] = useState(false);
 
   useEffect(() => {
-    axios
+    axioss
       .get(`${BASE_URL}/all_compyuters/`)
       .then((response) => {
         setData(response.data);

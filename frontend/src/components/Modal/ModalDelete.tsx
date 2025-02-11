@@ -7,6 +7,7 @@ import { useState } from "react";
 import { BASE_URL } from "../../utils/urls";
 
 import { FiAlertTriangle } from "react-icons/fi";
+import axioss from "../../api/axios";
 
 type Props = {
     openDeleteModal: boolean,
@@ -22,7 +23,7 @@ export function ModalDeleteComponent({ openDeleteModal, setDeleteOpenModal, dele
 
     const handleDelete = () => {
         setLoading(true);
-        axios
+        axioss
             .delete(`${BASE_URL}/comp_delete/${deleteModalData}`)
             .then(() => {
                 setLoading(false);

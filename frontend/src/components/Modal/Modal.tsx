@@ -8,6 +8,8 @@ import { Compyuter } from "../../types/compyuters";
 import { BASE_IMAGE_URL, BASE_URL } from "../../utils/urls";
 import { ModalDataInput } from "../Input/ModalDataInput";
 import ModalMultySelectInputTexnology from "../Input/ModalMultySelectInputTexnology";
+import axioss from "../../api/axios";
+import { isAuthenticated } from "../../utils/auth";
 
 
 type Props = {
@@ -22,7 +24,7 @@ export function ModalComponent({ openModal, setOpenModal, modalData }: Props) {
     useEffect(() => {
         if (!modalData) return; // Agar modalData yo'q bo'lsa, useEffect ishlamasin
 
-        axios
+        axioss
             .get(`${BASE_URL}/comp_detail/${modalData}`)
             .then((response) => {
                 setData(response.data);
@@ -30,6 +32,8 @@ export function ModalComponent({ openModal, setOpenModal, modalData }: Props) {
             .catch((err) => console.log(err));
     }, [modalData]);
 
+
+   
     return (
         <>
             <Modal show={openModal} onClose={() => setOpenModal(false)} size="200px" className="mx-auto z-[999999]" >

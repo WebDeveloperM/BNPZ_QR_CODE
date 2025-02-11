@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('api/v1/', include('Инвентаризация.urls')),
+    path('api/v1/users/', include('users.urls')),
 ]
 
 admin.site.site_header = "BNPZ QR_code"

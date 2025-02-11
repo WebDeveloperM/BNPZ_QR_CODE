@@ -4,19 +4,26 @@ import MainTable from '../../components/Tables/MainTable';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/urls';
 import { Compyuter } from '../../types/compyuters';
+import axioss from '../../api/axios';
+import { isAuthenticated } from '../../utils/auth';
+import { Navigate } from 'react-router-dom';
 
 
 const Main: React.FC = () => {
   const [data, setData] = useState<Compyuter[] | null>()
 
   useEffect(() => {
-    axios
+    axioss
       .get(`${BASE_URL}/all_compyuters/`)
       .then((response) => {
         setData(response.data);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  if (!isAuthenticated()) {
+    return <Navigate to="/auth/signin" />
+  }
 
   return (
     <>

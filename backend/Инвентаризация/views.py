@@ -7,9 +7,14 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from .models import *
 from .serializers import *
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class LoginView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def post(self, request):
         username = request.data.get('username')
@@ -22,6 +27,9 @@ class LoginView(APIView):
 
 
 class TexnologyApiView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get(request, *args, **kwargs):
         departament = DepartmentSerializer(Department.objects.all(), many=True).data
@@ -70,6 +78,9 @@ class TexnologyApiView(APIView):
 
 
 class CoreApiView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get(request, *args, **kwargs):
         compyuters = Compyuter.objects.all()
@@ -78,6 +89,9 @@ class CoreApiView(APIView):
 
 
 class CompDetailApiView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def get(request, *args, **kwargs):
         slug = kwargs.get('slug')

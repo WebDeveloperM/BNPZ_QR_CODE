@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
@@ -18,6 +18,7 @@ import DefaultLayout from './layout/DefaultLayout';
 import Main from './pages/Dashboard/Main';
 import AddCompyuter from './pages/AddCompyuter/AddCompyuter';
 import 'antd/dist/reset.css';
+import { isAuthenticated } from './utils/auth';
 
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
+
+  if (!isAuthenticated()) {
+    return <Navigate to="/auth/signin" />
+  }
   return loading ? (
     <Loader />
   ) : (
@@ -49,12 +54,12 @@ function App() {
           path="/add-compyuter"
           element={
             <>
-              <PageTitle title="Add Compyuter" />
+              <PageTitle title="Добавить компьютер" />
               <AddCompyuter />
             </>
           }
         />
-          <Route
+        <Route
           path="/tables"
           element={
             <>
@@ -148,7 +153,7 @@ function App() {
           path="/auth/signin"
           element={
             <>
-              <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Войти" />
               <SignIn />
             </>
           }

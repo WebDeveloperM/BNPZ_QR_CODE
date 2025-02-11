@@ -655,7 +655,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </clipPath>
                           </defs>
                         </svg>
-                        Authentication
+                        Авторизация
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'
                             }`}
@@ -687,7 +687,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Kirish
+                              Войти
                             </NavLink>
                           </li>
                           {/* <li>

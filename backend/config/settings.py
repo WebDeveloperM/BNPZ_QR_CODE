@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = 'django-insecure-ahl8&d=hrn@lp!hr0l87u#gf+pk&75!l2*o8$i#4uu&0l-copz
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -41,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'Инвентаризация',
+    'users',
 
     'rest_framework',
-    'rest_framework.authtoken', 
+    'rest_framework.authtoken',
 
     'drf_spectacular',
     'drf_spectacular_sidecar',
@@ -59,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 
 ROOT_URLCONF = 'config.urls'
 
@@ -83,6 +81,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'users.authentication.ExpiringTokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 # Database
@@ -94,7 +98,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -114,22 +117,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#     ),
-# }
-
-
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:5173',
     # 'https://bnpz.uz',
 )
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173', 
+    'http://localhost:5173',
     # 'https://bnpz.uz',
 ]
 
@@ -146,7 +140,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -161,8 +154,6 @@ if DEBUG:
 else:
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

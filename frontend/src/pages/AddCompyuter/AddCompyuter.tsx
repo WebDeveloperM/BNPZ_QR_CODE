@@ -1,7 +1,7 @@
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import AddCompyuterSeleced from '../../components/SelectedGroup/AddCompyuterSeleced';
 import { isValidElement, useEffect, useState } from 'react';
-import axios from 'axios';
+
 import { BASE_URL } from '../../utils/urls';
 import { TexnologyDataStructure } from '../../types/texnology';
 import AddCompyuterSelecedTexnology from '../../components/SelectedGroup/AddCompyuterSelecedTexnology';
@@ -10,7 +10,13 @@ import { Compyuter } from '../../types/compyuters';
 import CopyCompyuterSeleced from '../../components/SelectedGroup/CopyCompyuterSeleced';
 import MultySelectTexnology from '../../components/SelectedGroup/MultySelectTexnology';
 import Skeleton from '../../components/Skeleton/Skeleton';
+
+import axioss from '../../api/axios';
+import { isAuthenticated } from '../../utils/auth';
+import { Navigate } from 'react-router-dom';
 const AddCompyuter = () => {
+
+
   const [data, setData] = useState<TexnologyDataStructure | null>(null)
   const [localData, setLocalData] = useState("")
   // const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
@@ -52,20 +58,17 @@ const AddCompyuter = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
 
-  console.log(
-    
-  );
-  
 
   useEffect(() => {
-    axios
+
+    axioss
       .get(`${BASE_URL}/all_compyuters/`)
       .then((response) => {
         setCompyuterData(response.data);
       })
       .catch((err) => console.log(err));
 
-    axios
+    axioss
       .get(`${BASE_URL}/all_texnology/`)
       .then((response) => {
         setData(response.data);
@@ -73,10 +76,9 @@ const AddCompyuter = () => {
       .catch((err) => console.log(err));
   }, []);
 
-
   useEffect(() => {
     if (!selectedCompyuterId) return;
-    axios
+    axioss
       .get(`${BASE_URL}/comp_detail/${selectedCompyuterId}`)
       .then((response) => {
         setCompyuterDetailData(response.data);
@@ -85,11 +87,15 @@ const AddCompyuter = () => {
   }, [selectedCompyuterId]);
 
 
+
   useEffect(() => {
     setLocalData(data?.departament.find(x => x.id == Number(departament))?.boss_fullName as unknown as string)
   }, [departament]);
 
 
+  if (!isAuthenticated()) {
+    return <Navigate to="/auth/signin" />
+  }
   return (
     <>
       <Breadcrumb pageName="Добавить компьютер" />
