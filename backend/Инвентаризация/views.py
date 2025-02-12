@@ -116,10 +116,30 @@ class InfoCompyuterApiView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         all_compyuters = Compyuter.objects.all().count()
-        all_compyuters_with_printer = Compyuter.objects.all().count(
+        all_compyuters_with_printer = Compyuter.objects.filter(printer=True).count()
+        all_compyuters_with_scaner = Compyuter.objects.filter(scaner=True).count()
 
         print(all_compyuters)
         info = {
             "all_compyuters_count": all_compyuters,
+            "all_compyuters_with_printer": all_compyuters_with_printer,
+            "all_compyuters_with_scaner": all_compyuters_with_scaner,
         }
         return Response(info)
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .utils import import_computers_from_excel
+
+def upload_excel(request):
+    if request.method == "POST" and request.FILES.get("file"):
+        file = request.FILES["file"]
+        try:
+            import_computers_from_excel(file)
+            messages.success(request, "✅ Excel ma'lumotlari yuklandi!")
+        except Exception as e:
+            messages.error(request, f"❌ Xatolik: {e}")
+        return redirect("upload-excel")
+    return render(request, "upload.html")

@@ -238,8 +238,8 @@ class Compyuter(models.Model):
     RAMSize = models.ForeignKey(RAMSize, on_delete=models.CASCADE, verbose_name='Размер оперативной памяти')
     GPU = models.ForeignKey(GPU, on_delete=models.CASCADE, verbose_name='Видеокарта', null=True, blank=True,
                             default='Нет')
-    ipadresss = models.CharField(max_length=255, verbose_name='IPv4 адрес')
-    mac_adress = models.CharField(max_length=255, verbose_name='Физический(MAC) адрес')
+    ipadresss = models.CharField(max_length=255, verbose_name='IPv4 адрес', null=True, blank=True)
+    mac_adress = models.CharField(max_length=255, verbose_name='Физический(MAC) адрес', null=True, blank=True)
     printer = models.ManyToManyField(Printer, blank=True, verbose_name='Принтеры', related_name="printer")
     scaner = models.ManyToManyField(Scaner, blank=True, verbose_name='Сканеры', related_name="scaner")
     type_webcamera = models.ManyToManyField(TypeWebCamera, blank=True, related_name="typeCamera",

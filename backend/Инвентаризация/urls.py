@@ -7,6 +7,9 @@ urlpatterns = [
     path("comp_detail/<slug:slug>", CompDetailApiView.as_view()), 
     path("comp_delete/<slug:slug>", CompDeleteApiView.as_view()), 
     path("info-comp/", InfoCompyuterApiView.as_view()),
+    path("get-data/", upload_excel, name="upload-excel"),
+
+
 
 ]
 
