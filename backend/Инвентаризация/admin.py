@@ -31,6 +31,8 @@ class CompyuterAdmin(admin.ModelAdmin):
         'signature',
         'joinDate',
         'addedUser',
+        'updatedUser',
+        'updatedAt',
         'isActive',
         )
     

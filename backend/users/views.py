@@ -18,7 +18,7 @@ class LoginAPIView(APIView):
         password = request.data.get('password')
 
         user = authenticate(username=username, password=password)
-        print(username, password, "1111111111111111111")
+
         if user:
             # Foydalanuvchi uchun tokenni olish yoki yaratish
             token, created = CustomToken.objects.get_or_create(user=user)
@@ -30,7 +30,9 @@ class LoginAPIView(APIView):
 
             return Response({
                 'token': token.key,
-                'expires_at': token.expires_at  # Token muddati tugash vaqtini qaytaramiz
+                'expires_at': token.expires_at,
+                "firstname": user.first_name,
+                "lastname": user.last_name,
             }, status=status.HTTP_200_OK)
 
         return Response({'error': 'Неправильный логин или пароль'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -46,7 +48,8 @@ class UserInfoView(APIView):
         return Response({
             "id": user.id,
             "username": user.username,
-            "email": user.email
+            "firstname": user.firstname,
+            "lastname": user.lastname,
         }, status=status.HTTP_200_OK)
 
 

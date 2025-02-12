@@ -6,6 +6,7 @@ urlpatterns = [
     path("all_texnology/", TexnologyApiView.as_view()),           
     path("comp_detail/<slug:slug>", CompDetailApiView.as_view()), 
     path("comp_delete/<slug:slug>", CompDeleteApiView.as_view()), 
-    path('login/', LoginView.as_view(), name='login'),
+    path("info-comp/", InfoCompyuterApiView.as_view()),
+
 ]
 

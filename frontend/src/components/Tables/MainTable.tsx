@@ -37,29 +37,29 @@ const MainTable = () => {
 
       <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">QR Code</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">QR Code</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">Цехы</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">Цехы</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">Пользователь</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">Пользователь</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">Зав. склад</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">Зав. склад</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">Тип орг.техники</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">Тип орг.техники</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">Процессор</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">Процессор</p>
         </div>
 
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">Активен</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">Активен</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-base font-bold text-[#555]">Действия</p>
+          <p className="text-base font-bold text-[#555] dark:text-white">Действия</p>
         </div>
       </div>
 

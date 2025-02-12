@@ -11,21 +11,6 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
-class LoginView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    @staticmethod
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
 class TexnologyApiView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -122,3 +107,19 @@ class CompDeleteApiView(APIView):
             return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({"message": "Deleted successfully"})
+
+
+class InfoCompyuterApiView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        all_compyuters = Compyuter.objects.all().count()
+        all_compyuters_with_printer = Compyuter.objects.all().count(
+
+        print(all_compyuters)
+        info = {
+            "all_compyuters_count": all_compyuters,
+        }
+        return Response(info)

@@ -58,9 +58,11 @@ const AddCompyuter = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
 
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
-
+    if(!token) return
+    
     axioss
       .get(`${BASE_URL}/all_compyuters/`)
       .then((response) => {

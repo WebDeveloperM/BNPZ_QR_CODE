@@ -18,7 +18,6 @@ import DefaultLayout from './layout/DefaultLayout';
 import Main from './pages/Dashboard/Main';
 import AddCompyuter from './pages/AddCompyuter/AddCompyuter';
 import 'antd/dist/reset.css';
-import { isAuthenticated } from './utils/auth';
 
 
 function App() {
@@ -34,9 +33,6 @@ function App() {
   }, []);
 
 
-  if (!isAuthenticated()) {
-    return <Navigate to="/auth/signin" />
-  }
   return loading ? (
     <Loader />
   ) : (
@@ -158,7 +154,7 @@ function App() {
             </>
           }
         />
-        <Route
+        {/* <Route
           path="/auth/signup"
           element={
             <>
@@ -166,7 +162,7 @@ function App() {
               <SignUp />
             </>
           }
-        />
+        /> */}
       </Routes>
     </DefaultLayout>
   );

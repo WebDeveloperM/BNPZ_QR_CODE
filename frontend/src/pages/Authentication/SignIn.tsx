@@ -14,11 +14,13 @@ const SignIn: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [_, setResData] = useState("");
+  const [error, setError] = useState();
   const navigate = useNavigate();
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!username || !password) {
       toast.warning("Требуется логин и пароль")
       return
@@ -30,14 +32,18 @@ const SignIn: React.FC = () => {
         setResData(response.data);
         localStorage.setItem("token", response.data.token)
         localStorage.setItem("expires_at", response.data.expires_at)
+        localStorage.setItem("firstname", response.data.firstname)
+        localStorage.setItem("lastname", response.data.lastname)
+        localStorage.setItem("isLogin", "true")
         navigate("/")
       })
       .catch((err) => {
         toast.error("Неправильный логин или пароль");
-        console.log(err)
+        setError(err)
       });
 
   };
+  console.log(error, 1111111);
 
 
   return (
@@ -57,7 +63,7 @@ const SignIn: React.FC = () => {
                 Войти в систему
               </p>
               <p className="2xl:px-20 ">
-                Для доступа в систему необходимо войти в кабинет.
+                Для входа в систему введите логин и пароль
               </p>
 
               <span className="mt-5 inline-block">
@@ -238,7 +244,11 @@ const SignIn: React.FC = () => {
         </div>
       </div>
     </>
+
   );
 };
 
 export default SignIn;
+
+
+

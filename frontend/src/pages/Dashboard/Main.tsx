@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CardDataStats from '../../components/CardDataStats';
 import MainTable from '../../components/Tables/MainTable';
-import axios from 'axios';
 import { BASE_URL } from '../../utils/urls';
 import { Compyuter } from '../../types/compyuters';
 import axioss from '../../api/axios';
@@ -11,15 +10,29 @@ import { Navigate } from 'react-router-dom';
 
 const Main: React.FC = () => {
   const [data, setData] = useState<Compyuter[] | null>()
-
+  const [infoCompData, setInfoCompData] = useState()
+  const token = localStorage.getItem('token')
   useEffect(() => {
+    if (!token) return
     axioss
       .get(`${BASE_URL}/all_compyuters/`)
       .then((response) => {
         setData(response.data);
       })
       .catch((err) => console.log(err));
+
+    axioss
+      .get(`${BASE_URL}/info-comp/`)
+      .then((response) => {
+        setInfoCompData(response.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
+
+
+  console.log(infoCompData, "666666666666");
+
+
 
   if (!isAuthenticated()) {
     return <Navigate to="/auth/signin" />
@@ -125,7 +138,6 @@ const Main: React.FC = () => {
             <h1 className='text-5xl font-semibold mb-2'>Oшибка 500</h1>
             <p className='text-2xl'>(Internal Server Error)</p>
           </div>
-
         </div>
       }
 
