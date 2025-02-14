@@ -8,10 +8,12 @@ type Props = {
     selectData: GenericType[];
     selectedIdComp: GenericType[] | undefined;
     selectedTexnologyId: React.Dispatch<React.SetStateAction<number[] | null>>;
+    isSubmitted: boolean | null
 };
 
-export default function MultySelectTexnology({ label, selectData, selectedIdComp, selectedTexnologyId }: Props) {
+export default function MultySelectTexnology({ label, selectData, selectedIdComp, selectedTexnologyId, isSubmitted }: Props) {
     // Select uchun optionlarni yaratish
+    const [error, setError] = useState<string | null>('')
     const options = selectData?.map(item => ({
         label: item.name,
         value: item.id
@@ -20,10 +22,20 @@ export default function MultySelectTexnology({ label, selectData, selectedIdComp
     // **State to control selected values**
     const [selectedValues, setSelectedValues] = useState<number[]>([]);
 
+    useEffect(() => {
+        if (isSubmitted && selectedValues.length === 0) {
+            setError("Обязательное поле"); // Agar hech narsa tanlanmagan bo‘lsa, xatolik qo‘shiladi
+        } else {
+            setError(null); // Aks holda xatolik yo‘qoladi
+        }
+    }, [isSubmitted, selectedValues]);
+
+
     // **Sync state with props when component mounts or props change**
     useEffect(() => {
         if (selectedIdComp) {
             setSelectedValues(selectedIdComp.map(item => item.id));
+            selectedTexnologyId(selectedIdComp.map(item => item.id));
         }
     }, [selectedIdComp]);
 
@@ -43,12 +55,16 @@ export default function MultySelectTexnology({ label, selectData, selectedIdComp
                 style={{ width: '100%', height: "42px", marginTop: "3px" }}
                 placeholder={label}
                 showSearch
-                className="dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500"
+                className={` dark:border-gray-600 dark:text-white border dark:placeholder-gray-400 dark:bg-gray-800 dark:focus:border-gray-500 rounded-lg ${error ? " border-red-500" : "border-gray-300"
+                    }`}
                 optionFilterProp="label"
                 onChange={handleChange}
                 options={options}
-                value={selectedValues} // **Local state bilan bog‘lash**
+                value={selectedValues}
             />
+
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+
         </Space>
     );
 }

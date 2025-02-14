@@ -139,6 +139,7 @@ class CompyuterSerializer(serializers.ModelSerializer):
     type_webcamera = TypeWebCameraSerializer(many=True, read_only=True)
     model_webcam = ModelWebCameraSerializer()
     type_monitor = MonitorSerializer(many=True, read_only=True)
+    isActive = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Compyuter

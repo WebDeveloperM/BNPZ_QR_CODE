@@ -57,6 +57,7 @@ class TexnologyApiView(APIView):
             'type_webcamera': type_webcamera,
             'model_webcam': model_webcam,
             'type_monitor': type_monitor,
+
         }
 
         return Response(data)
@@ -85,8 +86,7 @@ class CompDetailApiView(APIView):
             return Response({"error": "Slug not found"}, status=status.HTTP_400_BAD_REQUEST)
         try:
             compyuter = Compyuter.objects.get(slug=slug)
-            print(compyuter, "111111111111111")
-
+            print(compyuter.isActive)
         except:
             return Response({"error": "Slug bo'yicha ma'lumot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
