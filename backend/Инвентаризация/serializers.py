@@ -116,6 +116,12 @@ class MonitorSerializer(serializers.ModelSerializer):
         model = Monitor
         fields = "__all__"
 
+class AddCompyuterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Compyuter
+        fields = "__all__"
+
 
 
 

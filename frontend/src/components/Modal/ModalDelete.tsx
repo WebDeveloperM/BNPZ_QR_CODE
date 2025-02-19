@@ -14,10 +14,11 @@ type Props = {
     setDeleteOpenModal: (value: boolean) => void,
     deleteModalData: string,
     setDeleteCompData: (value: boolean) => void,
+    deleteCompData: boolean,
 
 }
 
-export function ModalDeleteComponent({ openDeleteModal, setDeleteOpenModal, deleteModalData, setDeleteCompData }: Props) {
+export function ModalDeleteComponent({ openDeleteModal, setDeleteOpenModal, deleteModalData, setDeleteCompData, deleteCompData }: Props) {
 
     const [loading, setLoading] = useState(false);
 
@@ -28,7 +29,7 @@ export function ModalDeleteComponent({ openDeleteModal, setDeleteOpenModal, dele
             .then(() => {
                 setLoading(false);
                 setDeleteOpenModal(false);
-                setDeleteCompData(true)
+                setDeleteCompData(!deleteCompData)
             })
             .catch((err) => {
                 setLoading(false);

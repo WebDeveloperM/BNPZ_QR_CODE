@@ -8,7 +8,11 @@ from rest_framework import status
 from .models import *
 from .serializers import *
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .utils import import_computers_from_excel
+from django.shortcuts import get_object_or_404
 
 
 class TexnologyApiView(APIView):
@@ -128,10 +132,46 @@ class InfoCompyuterApiView(APIView):
         return Response(info)
 
 
+class AddCompyuterApiView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .utils import import_computers_from_excel
+    @staticmethod
+    def post(request, *args, **kwargs):
+        print(request.user)
+        request.data['addedUser'] = request.user.id
+        print(request.data)
+        serializer = AddCompyuterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EditCompyuterApiView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def put(request, *args, **kwargs):
+        instance = get_object_or_404(Compyuter, slug=kwargs.get('slug'))
+        print(instance, "111111111111111111111111111111")
+        serializer = AddCompyuterSerializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetDataByIPApiView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        compyuter = get_object_or_404(Compyuter, ipadresss=kwargs.get('ip'))
+        serializer = AddCompyuterSerializer(compyuter)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 def upload_excel(request):
     if request.method == "POST" and request.FILES.get("file"):

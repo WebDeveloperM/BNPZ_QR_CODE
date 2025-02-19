@@ -28,7 +28,7 @@ const SignIn: React.FC = () => {
     axios
       .post(`${BASE_URL}/users/login/`, { username, password })
       .then((response) => {
-        toast.success("Hammasi Ok");
+        toast.success("Вы успешно вошли в систему.");
         setResData(response.data);
         localStorage.setItem("token", response.data.token)
         localStorage.setItem("expires_at", response.data.expires_at)

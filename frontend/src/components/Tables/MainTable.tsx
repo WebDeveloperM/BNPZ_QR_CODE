@@ -4,7 +4,8 @@ import { BASE_IMAGE_URL, BASE_URL } from "../../utils/urls";
 import { ModalDeleteComponent } from '../Modal/ModalDelete';
 import { ModalComponent } from '../Modal/Modal';
 import axioss from '../../api/axios';
-
+import { GrEdit } from "react-icons/gr";
+import { Link } from 'react-router-dom';
 
 const MainTable = () => {
   const [data, setData] = useState<Compyuter[]>([])
@@ -39,23 +40,23 @@ const MainTable = () => {
         <div className="col-span-1 flex items-center">
           <p className="text-base font-bold text-[#555] dark:text-white">QR Code</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-1 flex items-center sm:hidden ">
           <p className="text-base font-bold text-[#555] dark:text-white">Цехы</p>
         </div>
         <div className="col-span-1 flex items-center">
           <p className="text-base font-bold text-[#555] dark:text-white">Пользователь</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-1 flex items-center sm:hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Зав. склад</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-1 flex items-center sm:hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Тип орг.техники</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-1 flex items-center sm:hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Процессор</p>
         </div>
 
-        <div className="col-span-1 flex items-center">
+        <div className="col-span-1 flex items-center sm:hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Активен</p>
         </div>
         <div className="col-span-1 flex items-center">
@@ -74,7 +75,7 @@ const MainTable = () => {
                 <img src={`${BASE_IMAGE_URL}${product.qr_image}`} alt="Product" />
               </div>
             </div>
-            <div className="col-span-1 flex items-center">
+            <div className="col-span-1 flex items-center ">
               <p className="text-sm text-black dark:text-white">
                 {product.departament.name}
               </p>
@@ -95,7 +96,10 @@ const MainTable = () => {
               <p className="text-sm text-meta-3">{product.CPU.name}</p>
             </div>
             <div className="col-span-1 flex items-center">
-              <p className="text-sm text-meta-3">{product.CPU.name}</p>
+              <input type="checkbox"
+                disabled
+                checked={product.isActive}
+                className="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-brand-500 dark:checked:border-brand-500 focus:ring-offset-0 focus:outline-none" />
             </div>
 
             <div className="col-span-1 flex items-center">
@@ -123,6 +127,9 @@ const MainTable = () => {
                     />
                   </svg>
                 </button>
+                <Link to={`edit-computer/${product.slug}`}>
+                  <GrEdit className="hover:text-primary" />
+                </Link>
                 <button className="hover:text-primary"
                   onClick={() => {
                     setDeleteOpenModal(true)
@@ -168,7 +175,7 @@ const MainTable = () => {
 
       <ModalComponent openModal={openModal} setOpenModal={setOpenModal} modalData={modalData} />
 
-      <ModalDeleteComponent openDeleteModal={openDeleteModal} setDeleteOpenModal={setDeleteOpenModal} deleteModalData={deleteModalData} setDeleteCompData={setDeleteCompData} />
+      <ModalDeleteComponent openDeleteModal={openDeleteModal} setDeleteOpenModal={setDeleteOpenModal} deleteModalData={deleteModalData} setDeleteCompData={setDeleteCompData} deleteCompData={deleteCompData} />
 
 
     </div>

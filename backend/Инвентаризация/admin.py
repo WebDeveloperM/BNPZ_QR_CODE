@@ -64,7 +64,7 @@ class CompyuterAdmin(admin.ModelAdmin):
         'isActive'
         )
     
-    prepopulated_fields = {"slug": ("seal_number", "mac_adress",)}
+
     search_fields = ('seal_number', 'departament')
 
     def save_model(self, request, obj, form, change):

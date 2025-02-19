@@ -18,6 +18,8 @@ import DefaultLayout from './layout/DefaultLayout';
 import Main from './pages/Dashboard/Main';
 import AddCompyuter from './pages/AddCompyuter/AddCompyuter';
 import 'antd/dist/reset.css';
+import { ToastContainer } from 'react-toastify';
+import EditCompyuter from './pages/EditCompyuter/EditCompyuter';
 
 
 function App() {
@@ -52,6 +54,15 @@ function App() {
             <>
               <PageTitle title="Добавить компьютер" />
               <AddCompyuter />
+            </>
+          }
+        />
+        <Route
+          path={`/edit-computer/:slug`}
+          element={
+            <>
+              <PageTitle title="Редактирование компьютер" />
+              <EditCompyuter />
             </>
           }
         />
@@ -164,7 +175,9 @@ function App() {
           }
         /> */}
       </Routes>
+      <ToastContainer />
     </DefaultLayout>
+    
   );
 }
 

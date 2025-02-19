@@ -13,8 +13,8 @@ import Skeleton from '../../components/Skeleton/Skeleton';
 
 import axioss from '../../api/axios';
 import { isAuthenticated } from '../../utils/auth';
-import { Navigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 
@@ -64,39 +64,8 @@ const AddCompyuter = () => {
 
   const [isActive, setIsActive] = useState(false);
 
-  // console.log(compyuterDetailData, "3232323232323");
-
-
-  // console.log(seal_number, "seal_number")
-  // console.log(departament, "departament")
-  // console.log(user, "user")
-  // console.log(warehouse_manager, "warehouse_manager")
-  // console.log(type_compyuter, "type_compyuter")
-  // console.log(motherboard, "motherboard")
-  // console.log(motherboard_model, "motherboard_model")
-  // console.log(CPU, "CPU")
-  // console.log(generation, "generation")
-  // console.log(frequency, "frequency")
-  // console.log(HDD, "HDD")
-  // console.log(SSD, "SSD")
-  // console.log(disk_type, "disk_type")
-  // console.log(RAM_type, "RAM_type")
-  // console.log(RAMSize, "RAMSize")
-  // console.log(GPU, "GPU")
-  // console.log(ipadresss, "ipadresss")
-  // console.log(mac_adress, "mac_adress")
-  // console.log(printer, "printer")
-  // console.log(scaner, "scaner")
-  // console.log(type_webcamera, "type_webcamera")
-  // console.log(model_webcam, "model_webcam")
-  // console.log(type_monitor, "type_monitor")
-  // console.log(isActive, "isActive")
-  // console.log(RAM_type, "RAM_type")
-
-  // console.log("------------------------------------------------");
-
   const token = localStorage.getItem('token')
-
+  const navigate = useNavigate()
   useEffect(() => {
     if (!token) return
 
@@ -151,9 +120,9 @@ const AddCompyuter = () => {
     }
 
     const formData = {
-      seal_number,
+      seal_number: seal_number.value,
       departament,
-      user,
+      user: user.value,
       warehouse_manager,
       type_compyuter,
       motherboard,
@@ -167,30 +136,28 @@ const AddCompyuter = () => {
       RAM_type,
       RAMSize,
       GPU,
-      ipadresss,
-      mac_adress,
+      ipadresss: ipadresss.value,
+      mac_adress: mac_adress.value,
       printer,
       scaner,
       type_webcamera,
       model_webcam,
       type_monitor,
       isActive,
+      // slug: `${seal_number.value}-${mac_adress.value}`
     }
-    axioss
-      .post(`${BASE_URL}/users/login/`, formData)
-      .then((response) => {
-        toast.success("Hammasi Ok");
-        console.log(formData);
-        console.log(response.data, "response data");
 
-        // setResData(response.data);
-        // navigate("/")
+    axioss
+      .post(`${BASE_URL}/add-compyuter/`, formData)
+      .then((response) => {
+        toast.success("Компьютер успешно добавлен", {
+          onClose: () => navigate("/"),
+        });
       })
       .catch((err) => {
-        toast.error("Неправильный логин или пароль");
-        console.log(err, "error");
-
-        // setError(err)
+        if (err.response.data.slug[0] == "Компьютеры  с таким slug уже существует.")
+          toast.error("Такой компьютер существует")
+        else toast.error("Произошла ошибка.")
       });
 
   };
@@ -214,7 +181,7 @@ const AddCompyuter = () => {
               <h3 className="font-medium text-black dark:text-white">
                 Введите компьютерные данные
               </h3>
-
+              <ToastContainer />
               <div className={`mx-5 mt-4  ${!openCopyTab ? "block" : "hidden"} `}>
                 <button onClick={() => setOpenCopyTab(!openCopyTab)} className="inline-flex items-center justify-center gap-2.5 rounded-md bg-meta-3 py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" >
                   <FaCopy />

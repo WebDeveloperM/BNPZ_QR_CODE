@@ -262,52 +262,86 @@ class Compyuter(models.Model):
     def __str__(self):
         return self.user
 
+    # def generate_qr(self):
+    #     """Генерация QR-кода на основе поля id."""
+    #     if self.slug and not self.qr_image:  # Проверяем, существует ли id
+    #         qr = qrcode.QRCode(
+    #             version=1,
+    #             error_correction=qrcode.constants.ERROR_CORRECT_L,
+    #             box_size=10,
+    #             border=4,
+    #         )
+    #         qr.add_data(f"https://back.bnpz.uz/{str(self.slug)}")
+    #         qr.make(fit=True)
+    #
+    #         # Создание изображения QR-кода
+    #         img = qr.make_image(fill_color="black", back_color="white")
+    #         buffer = BytesIO()
+    #         img.save(buffer, format="PNG")
+    #         buffer.seek(0)
+    #
+    #         # Сохранение изображения в поле qr_image
+    #         file_name = f"qr_code_{self.slug}.png"
+    #         self.qr_image.save(file_name, ContentFile(buffer.read()), save=False)
+    #
+    #         return buffer.getvalue()  # Возвращаем QR-код как байтовый объект
+    #     return None
+    #
+    def save(self, *args, **kwargs):
+        user = CurrentUserMiddleware.get_current_user()  # Hozirgi foydalanuvchini olish
+        if user and user.is_authenticated:
+            self.updatedUser = user  # O‘zgartirgan foydalanuvchini qo‘shish
+
+        # Slug va QR kodni yaratishdan oldin saqlash
+        if not self.slug:  # Agar `id` bo‘lmasa, birinchi marta saqlash
+            # Slug maydonini yangilash
+            if not self.slug:
+                self.slug = slugify(f"computer-{self.seal_number}")
+
+            super().save(*args, **kwargs)  # Birinchi marta saqlash
+    #
+    #     # Generatsiya qilgan QR kodini saqlash
+    #     if not self.qr_image:
+    #         self.generate_qr()
+    #         super().save(update_fields=["qr_image"])  # Faqat `qr_image`ni yangilash
+    #
+    #     # Oxirgi saqlash: agar boshqa o‘zgarishlar bo‘lsa
+    #     super().save(*args, **kwargs)  # Faqat oxirgi safar saqlanadi
+
+    def save(self, *args, **kwargs):
+        user = CurrentUserMiddleware.get_current_user()  # Hozirgi foydalanuvchini olish
+        if user and user.is_authenticated:
+            self.updatedUser = user
+
+        if not self.slug:  # Agar slug yo'q bo'lsa, yaratilsin
+            self.slug = slugify(f"computers-{self.seal_number}")
+
+        if not self.qr_image:  # Agar qr_image mavjud bo'lmasa, yaratilsin
+            self.generate_qr()
+
+        super().save(*args, **kwargs)  # Oxirgi saqlash
+
     def generate_qr(self):
-        """Генерация QR-кода на основе поля id."""
-        if self.slug and not self.qr_image:  # Проверяем, существует ли id
+        """QR-kodni yaratish va uni rasm sifatida saqlash."""
+        if self.seal_number:  # Slug mavjud bo'lsa, QR-kodni yaratish
             qr = qrcode.QRCode(
                 version=1,
                 error_correction=qrcode.constants.ERROR_CORRECT_L,
                 box_size=10,
                 border=4,
             )
-            qr.add_data(f"https://back.bnpz.uz/{str(self.slug)}")
+            qr.add_data(f"http://192.168.2.72:5173/edit-computer/{self.slug}")
             qr.make(fit=True)
 
-            # Создание изображения QR-кода
+            # QR-kodni rasmga aylantirish
             img = qr.make_image(fill_color="black", back_color="white")
             buffer = BytesIO()
             img.save(buffer, format="PNG")
             buffer.seek(0)
 
-            # Сохранение изображения в поле qr_image
+            # Rasmni saqlash
             file_name = f"qr_code_{self.slug}.png"
             self.qr_image.save(file_name, ContentFile(buffer.read()), save=False)
-
-            return buffer.getvalue()  # Возвращаем QR-код как байтовый объект
-        return None
-
-    def save(self, *args, **kwargs):
-
-        user = CurrentUserMiddleware.get_current_user()  # Hozirgi foydalanuvchini olish
-        print(user, "222222222222222222")
-        if user and user.is_authenticated:
-            self.updatedUser = user  # O‘zgartirgan foydalanuvchini qo‘shish
-        super().save(*args, **kwargs)
-
-        # Если объект еще не сохранен (нет id), сохраняем его сначала
-        if not self.pk:  # Проверяем, есть ли первичный ключ
-            super().save(*args, **kwargs)  # Сохраняем объект для получения id
-
-        # Генерируем QR-код только после получения id
-        if not self.qr_image:  # Проверяем, не существует ли уже QR-кода
-            self.generate_qr()  # Генерация QR-кода
-            super().save(update_fields=["qr_image"])  # Сохраняем только поле qr_image
-
-        if not self.slug:
-            self.slug = slugify(f"{self.seal_number}-{self.joinDate}")
-            super().save(*args, **kwargs)
-        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Компьютеры '
