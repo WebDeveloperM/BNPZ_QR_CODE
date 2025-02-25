@@ -120,12 +120,21 @@ class InfoCompyuterApiView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         all_compyuters = Compyuter.objects.filter(isActive=True).count()
-        all_compyuters_with_printer = Compyuter.objects.annotate(printer_count=Count('printer')).filter(printer_count__gt=0).count()
-        all_compyuters_with_scaner = Compyuter.objects.annotate(scaner_count=Count('scaner')).filter(scaner_count__gt=0).count()
-        all_compyuters_with_scaner = Compyuter.objects.annotate(type_webcamera_count=Count('type_webcamera')).filter(type_webcamera_count__gt=0).count()
+        # all_compyuters_with_printer = Compyuter.objects.annotate(printer_count=Count('printer')).filter(printer_count__gt=0).count()
+        # all_compyuters_with_scaner = Compyuter.objects.annotate(scaner_count=Count('scaner')).filter(scaner_count__gt=0).count()
+        # all_compyuters_with_scaner = Compyuter.objects.annotate(type_webcamera_count=Count('type_webcamera')).filter(type_webcamera_count__gt=0).count()
         # all_compyuters_with_webcam = Compyuter.objects.annotate(model_webcam_count=Count('model_webcam')).filter(model_webcam_count__gt=0).count()
         # all_compyuters_with_scaner = Compyuter.objects.filter(scaner=True).count()
-        all_compyuters_with_webcam = Compyuter.objects.filter(type_webcamera__isnull=False).count()
+
+        all_compyuters_with_printer = Compyuter.objects.filter(isActive=True, printer__isnull=False).distinct().count()
+        
+        # Skaneri bor kompyuterlar soni (har bir kompyuter faqat bir marta hisoblanadi)
+        all_compyuters_with_scaner = Compyuter.objects.filter(isActive=True, scaner__isnull=False).distinct().count()
+        
+        # Veb-kamerasi bor kompyuterlar soni (har bir kompyuter faqat bir marta hisoblanadi)
+        all_compyuters_with_webcam = Compyuter.objects.filter(isActive=True, type_webcamera__isnull=False).distinct().count()
+
+        # all_compyuters_with_webcam = Compyuter.objects.filter(type_webcamera__isnull=False).count()
 
     
         info = {
@@ -160,18 +169,34 @@ class FilterDataByIPApiView(APIView):
 
     @staticmethod
     def post(request, *args, **kwargs):
+        # request'dan kelgan 'key' qiymatini olish
         key = request.data.get('key')
+        
+        # 'key' qiymatiga qarab filterlash
         if key == "Компьютеры":
-            computers = Compyuter.objects.filter(isActive=True)
-        if key == "Принтеры":
-            computers = Compyuter.objects.exclude(printer=None)      
-        if key == "Сканеры":
-            computers = Compyuter.objects.exclude(scaner=None)      
-        if key == "Веб-камеры":
-            computers = Compyuter.objects.exclude(model_webcam=None)  
-        print(computers,"222")
+            # Faol kompyuterlarni olish
+            computers = Compyuter.objects.filter(isActive=True).distinct()
+        
+        elif key == "Принтеры":
+            # Printeri bo'lgan kompyuterlarni olish va faqat bitta marta qaytarish
+            computers = Compyuter.objects.filter(isActive=True, printer__isnull=False).distinct()
+        
+        elif key == "Сканеры":
+            # Skaneri bo'lgan kompyuterlarni olish va faqat bitta marta qaytarish
+            computers = Compyuter.objects.filter(isActive=True, scaner__isnull=False).distinct()
+        
+        elif key == "Веб-камеры":
+            # Veb-kamerasi bo'lgan kompyuterlarni olish va faqat bitta marta qaytarish
+            computers = Compyuter.objects.filter(isActive=True, type_webcamera__isnull=False).distinct()
+        
+        else:
+            # Agar 'key'ning qiymati noto'g'ri bo'lsa, xato yoki bo'sh ro'yxat qaytarish
+            return Response({"error": "Invalid key value"}, status=400)
+
+        # Kompyuterlar ro'yxatini serializer orqali qaytarish
         serializer = AddCompyuterSerializer(computers, many=True)
         return Response(serializer.data)
+
 
 
 class EditCompyuterApiView(APIView):

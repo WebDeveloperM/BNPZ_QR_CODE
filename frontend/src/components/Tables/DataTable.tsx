@@ -12,9 +12,6 @@ import { GrEdit } from "react-icons/gr";
 export default function ComputerTable() {
     const [computers, setComputers] = useState<Compyuter[]>([]);
     const [data, setData] = useState<Compyuter[]>([])
-    const [openModal, setOpenModal] = useState(false);
-    const [modalData, setModalData] = useState("");
-
     const [openDeleteModal, setDeleteOpenModal] = useState(false);
     const [deleteModalData, setDeleteModalData] = useState("");
     const [deleteCompData, setDeleteCompData] = useState(false);
