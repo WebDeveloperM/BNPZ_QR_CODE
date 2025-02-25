@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .utils import import_computers_from_excel
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Count
 
 class TexnologyApiView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -119,19 +119,21 @@ class InfoCompyuterApiView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        all_compyuters = Compyuter.objects.all().count()
-        all_compyuters_with_printer = Compyuter.objects.filter(printer=True).count()
-        all_compyuters_with_scaner = Compyuter.objects.filter(scaner=True).count()
-        all_compyuters_with_webcam = Compyuter.objects.filter(model_webcam=True).count()
+        all_compyuters = Compyuter.objects.filter(isActive=True).count()
+        all_compyuters_with_printer = Compyuter.objects.annotate(printer_count=Count('printer')).filter(printer_count__gt=0).count()
+        all_compyuters_with_scaner = Compyuter.objects.annotate(scaner_count=Count('scaner')).filter(scaner_count__gt=0).count()
+        all_compyuters_with_scaner = Compyuter.objects.annotate(type_webcamera_count=Count('type_webcamera')).filter(type_webcamera_count__gt=0).count()
+        # all_compyuters_with_webcam = Compyuter.objects.annotate(model_webcam_count=Count('model_webcam')).filter(model_webcam_count__gt=0).count()
+        # all_compyuters_with_scaner = Compyuter.objects.filter(scaner=True).count()
+        all_compyuters_with_webcam = Compyuter.objects.filter(type_webcamera__isnull=False).count()
 
-        print(all_compyuters)
+    
         info = {
             "all_compyuters_count": all_compyuters,
             "all_compyuters_with_printer": all_compyuters_with_printer,
             "all_compyuters_with_scaner": all_compyuters_with_scaner,
             "all_compyuters_with_webcam": all_compyuters_with_webcam,
         }
-        print(info, "1111111111111111111")
         return Response(info)
 
 
@@ -158,17 +160,18 @@ class FilterDataByIPApiView(APIView):
 
     @staticmethod
     def post(request, *args, **kwargs):
-        print(request.data)
-        print(kwargs)
-
-        request.data['addedUser'] = request.user.id
-        print(request.data)
-        # serializer = AddCompyuterSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response(request.data)
+        key = request.data.get('key')
+        if key == "Компьютеры":
+            computers = Compyuter.objects.filter(isActive=True)
+        if key == "Принтеры":
+            computers = Compyuter.objects.exclude(printer=None)      
+        if key == "Сканеры":
+            computers = Compyuter.objects.exclude(scaner=None)      
+        if key == "Веб-камеры":
+            computers = Compyuter.objects.exclude(model_webcam=None)  
+        print(computers,"222")
+        serializer = AddCompyuterSerializer(computers, many=True)
+        return Response(serializer.data)
 
 
 class EditCompyuterApiView(APIView):
@@ -178,7 +181,6 @@ class EditCompyuterApiView(APIView):
     @staticmethod
     def put(request, *args, **kwargs):
         instance = get_object_or_404(Compyuter, slug=kwargs.get('slug'))
-        print(instance, "111111111111111111111111111111")
         serializer = AddCompyuterSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()

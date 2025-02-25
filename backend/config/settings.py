@@ -95,12 +95,12 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # DATABASES = {
@@ -119,11 +119,11 @@ REST_FRAMEWORK = {
 # }
 
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://postgres:shMM1514@localhost:5432/qr_code_db'
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgres://postgres:shMM1514@localhost:5432/qr_code_db'
+#     )
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

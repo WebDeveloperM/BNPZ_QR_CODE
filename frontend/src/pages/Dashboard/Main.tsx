@@ -39,7 +39,7 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     axioss
-      .get(`${BASE_URL}/filter-data/${selectKey}`)
+      .post(`${BASE_URL}/filter-data/`, {key: selectKey})
       .then((response) => {
         setData(response.data);
       })
