@@ -12,6 +12,7 @@ urlpatterns = [
     path("edit-compyuter/<str:slug>/", EditCompyuterApiView.as_view()),
     path("get-data/", upload_excel, name="upload-excel"),
     path("get-data/<str:ip>/", GetDataByIPApiView.as_view(), name="upload-excel"),
+    path("filter-data/<str:key>/", FilterDataByIPApiView.as_view(), name="upload-excel"),
     path("register_computer/", register_computer)
 
 ]

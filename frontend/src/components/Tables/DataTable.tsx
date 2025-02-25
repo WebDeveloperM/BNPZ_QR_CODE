@@ -37,7 +37,7 @@ export default function ComputerTable() {
     }, [deleteCompData]);
 
     const qrCodeBodyTemplate = (rowData: Compyuter) => {
-        return <img src={`${BASE_IMAGE_URL}${rowData.qr_image}`} alt="QR Code" width="90" />;
+        return <img src={`${BASE_IMAGE_URL}${rowData.qr_image}`} alt="QR Code" width="80" />;
     };
 
     const isActiveBodyTemplate = (rowData: Compyuter) => {

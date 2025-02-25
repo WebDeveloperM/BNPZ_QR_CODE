@@ -1,18 +1,17 @@
+import { SelectAllLabel } from 'antd/es/transfer';
 import React, { ReactNode } from 'react';
 
 interface CardDataStatsProps {
   title: string;
   total: string;
-  levelUp?: boolean;
-  levelDown?: boolean;
+  setSelectKey: React.Dispatch<React.SetStateAction<string | null>>;
   children: ReactNode;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
   title,
   total,
-  levelUp,
-  levelDown,
+  setSelectKey,
   children,
 }) => {
   return (
@@ -23,18 +22,14 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
 
       <div className="mt-4 flex items-end justify-between">
         <div>
-          <h4 className="text-title-md font-bold text-black dark:text-white">
+          <h4  className="text-title-md font-bold text-black dark:text-white">
             {total}
           </h4>
-          <span className="text-sm font-medium">{title}</span>
+          <span onClick={()=>setSelectKey(title)}  className="text-sm font-medium hover:underline cursor-pointer">{title}</span>
+          
         </div>
 
-        <span
-          className={`flex items-center gap-1 text-sm font-medium ${
-            levelUp && 'text-meta-3'
-          } ${levelDown && 'text-meta-5'} `}
-        >
-        </span>
+       
       </div>
     </div>
   );
