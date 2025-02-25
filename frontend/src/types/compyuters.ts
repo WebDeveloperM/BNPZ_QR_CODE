@@ -87,3 +87,14 @@ export type Compyuter = {
     isActive: boolean,
     addedUser: number
 };
+
+
+export type InfoComputerData = {
+    all_compyuters_count: number,
+    all_compyuters_with_printer: number,
+    all_compyuters_with_scaner: number,
+    all_compyuters_with_webcam: number,
+};
+
+
+

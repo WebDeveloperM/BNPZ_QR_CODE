@@ -122,13 +122,16 @@ class InfoCompyuterApiView(APIView):
         all_compyuters = Compyuter.objects.all().count()
         all_compyuters_with_printer = Compyuter.objects.filter(printer=True).count()
         all_compyuters_with_scaner = Compyuter.objects.filter(scaner=True).count()
+        all_compyuters_with_webcam = Compyuter.objects.filter(model_webcam=True).count()
 
         print(all_compyuters)
         info = {
             "all_compyuters_count": all_compyuters,
             "all_compyuters_with_printer": all_compyuters_with_printer,
             "all_compyuters_with_scaner": all_compyuters_with_scaner,
+            "all_compyuters_with_webcam": all_compyuters_with_webcam,
         }
+        print(info, "1111111111111111111")
         return Response(info)
 
 
@@ -139,6 +142,7 @@ class AddCompyuterApiView(APIView):
     @staticmethod
     def post(request, *args, **kwargs):
         print(request.user)
+
         request.data['addedUser'] = request.user.id
         print(request.data)
         serializer = AddCompyuterSerializer(data=request.data)

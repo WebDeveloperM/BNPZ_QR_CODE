@@ -4,6 +4,7 @@ from .models import *
 
 
 admin.site.register(Department)
+admin.site.register(ComputerAgent)
 
 @admin.register(Compyuter)
 class CompyuterAdmin(admin.ModelAdmin):

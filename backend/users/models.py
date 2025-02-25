@@ -16,3 +16,6 @@ class CustomToken(Token):
 
     def is_expired(self):
         return self.expires_at and now() > self.expires_at
+
+
+

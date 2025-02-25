@@ -103,21 +103,27 @@ REST_FRAMEWORK = {
 # }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'qr_code_db',
-        'USER': "postgres",
-        'PASSWORD': "shMM1514",
-        'HOST': "localhost",
-        'PORT': 5432,
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'qr_code_db',
+#         'USER': "postgres",
+#         'PASSWORD': "shMM1514",
+#         'HOST': "localhost",
+#         'PORT': 5432,
+#     }
+# }
+#
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+# }
+
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(
+        default='postgres://postgres:shMM1514@localhost:5432/qr_code_db'
+    )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

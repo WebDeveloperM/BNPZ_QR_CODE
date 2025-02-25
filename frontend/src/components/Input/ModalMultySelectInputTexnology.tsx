@@ -25,7 +25,7 @@ export default function ModalMultySelectInputTexnology({ label, selectedIdComp }
             <Select
                 mode="multiple"
                 allowClear
-                style={{ width: '100%', height: "43px", marginTop: "3px" }}
+                style={{ width: '100%', marginTop: "3px" }}
                 placeholder={label}
                 showSearch
                 optionFilterProp="label"

@@ -72,7 +72,7 @@ export default function AddCompyuterSelecedTexnology({ label, selectData, select
 
       {/* Tanlangan variantni ko'rsatish va dropdownni ochish */}
       <div
-        className={`w-full flex pt-2 appearance-none rounded-md border h-11 px-5 outline-none transition 
+        className={`w-full flex pt-2 appearance-none rounded-md border h-[38px] px-5 outline-none transition 
           ${error ? "border-red-500" : "border-stroke"} focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input cursor-pointer`}
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >

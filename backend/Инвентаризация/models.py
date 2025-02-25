@@ -233,23 +233,22 @@ class Compyuter(models.Model):
     frequency = models.ForeignKey(Frequency, on_delete=models.CASCADE, verbose_name='Частота процессора')
     HDD = models.ForeignKey(HDD, on_delete=models.CASCADE, verbose_name='Диск  HDD')
     SSD = models.ForeignKey(SSD, on_delete=models.CASCADE, verbose_name='Диск  SSD')
-    disk_type = models.ForeignKey(DiskType, on_delete=models.CASCADE, default="Нет", verbose_name='Тип диска')
-    RAM_type = models.ForeignKey(RAMType, on_delete=models.CASCADE, default="Нет", verbose_name='Тип оперативки')
+    disk_type = models.ForeignKey(DiskType, on_delete=models.CASCADE, verbose_name='Тип диска')
+    RAM_type = models.ForeignKey(RAMType, on_delete=models.CASCADE, verbose_name='Тип оперативки')
     RAMSize = models.ForeignKey(RAMSize, on_delete=models.CASCADE, verbose_name='Размер оперативной памяти')
-    GPU = models.ForeignKey(GPU, on_delete=models.CASCADE, verbose_name='Видеокарта', null=True, blank=True,
-                            default='Нет')
+    GPU = models.ForeignKey(GPU, on_delete=models.CASCADE, verbose_name='Видеокарта', null=True, blank=True)
     ipadresss = models.CharField(max_length=255, verbose_name='IPv4 адрес', null=True, blank=True)
     mac_adress = models.CharField(max_length=255, verbose_name='Физический(MAC) адрес', null=True, blank=True)
     printer = models.ManyToManyField(Printer, blank=True, verbose_name='Принтеры', related_name="printer")
     scaner = models.ManyToManyField(Scaner, blank=True, verbose_name='Сканеры', related_name="scaner")
     type_webcamera = models.ManyToManyField(TypeWebCamera, blank=True, related_name="typeCamera",
                                             verbose_name='Тип вебкамера')
-    model_webcam = models.ForeignKey(ModelWebCamera, on_delete=models.CASCADE, default="Нет",
-                                     verbose_name='Модель вебкамеры', null=True, blank=True)
+    model_webcam = models.ForeignKey(ModelWebCamera, on_delete=models.CASCADE, verbose_name='Модель вебкамеры',
+                                     null=True, blank=True)
     type_monitor = models.ManyToManyField(Monitor, blank=True, related_name="typeMonitor", verbose_name='Тип Монитора')
 
     qr_image = models.ImageField(upload_to='qr_codes/', verbose_name='QR-код', null=True, blank=True)
-    signature = models.ImageField(upload_to='signature/', verbose_name='Подпись', null=True, blank=True)
+    signature = models.ImageField(upload_to='signature/', verbose_name='', null=True, blank=True)
     joinDate = models.DateTimeField(auto_now=True, null=False, verbose_name="Дате")
     addedUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Сотрудник")
     updatedUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
@@ -262,31 +261,6 @@ class Compyuter(models.Model):
     def __str__(self):
         return self.user
 
-    # def generate_qr(self):
-    #     """Генерация QR-кода на основе поля id."""
-    #     if self.slug and not self.qr_image:  # Проверяем, существует ли id
-    #         qr = qrcode.QRCode(
-    #             version=1,
-    #             error_correction=qrcode.constants.ERROR_CORRECT_L,
-    #             box_size=10,
-    #             border=4,
-    #         )
-    #         qr.add_data(f"https://back.bnpz.uz/{str(self.slug)}")
-    #         qr.make(fit=True)
-    #
-    #         # Создание изображения QR-кода
-    #         img = qr.make_image(fill_color="black", back_color="white")
-    #         buffer = BytesIO()
-    #         img.save(buffer, format="PNG")
-    #         buffer.seek(0)
-    #
-    #         # Сохранение изображения в поле qr_image
-    #         file_name = f"qr_code_{self.slug}.png"
-    #         self.qr_image.save(file_name, ContentFile(buffer.read()), save=False)
-    #
-    #         return buffer.getvalue()  # Возвращаем QR-код как байтовый объект
-    #     return None
-    #
     def save(self, *args, **kwargs):
         user = CurrentUserMiddleware.get_current_user()  # Hozirgi foydalanuvchini olish
         if user and user.is_authenticated:
@@ -299,6 +273,7 @@ class Compyuter(models.Model):
                 self.slug = slugify(f"computer-{self.seal_number}")
 
             super().save(*args, **kwargs)  # Birinchi marta saqlash
+
     #
     #     # Generatsiya qilgan QR kodini saqlash
     #     if not self.qr_image:
@@ -330,7 +305,7 @@ class Compyuter(models.Model):
                 box_size=10,
                 border=4,
             )
-            qr.add_data(f"http://192.168.2.72:5173/edit-computer/{self.slug}")
+            qr.add_data(f"http://192.168.2.72:5173/view-computer/{self.slug}")
             qr.make(fit=True)
 
             # QR-kodni rasmga aylantirish
@@ -346,3 +321,55 @@ class Compyuter(models.Model):
     class Meta:
         verbose_name = 'Компьютеры '
         verbose_name_plural = 'Компьютеры'
+
+
+from rest_framework import serializers, viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+
+
+class ComputerAgent(models.Model):
+    username = models.CharField(max_length=100)
+    ip_address = models.GenericIPAddressField()
+    mac_address = models.CharField(max_length=17)
+    cpu_info = models.CharField(max_length=255)
+    ram_size = models.CharField(max_length=50)
+    hdd_size = models.CharField(max_length=50)
+    ssd_size = models.CharField(max_length=50, blank=True, null=True)
+    gpu_info = models.CharField(max_length=255, blank=True, null=True)
+    printer_info = models.CharField(max_length=255, blank=True, null=True)
+    scanner_info = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.username} - {self.ip_address}"
+
+
+class ComputerAgentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComputerAgent
+        fields = '__all__'
+
+
+class ComputerViewSet(viewsets.ModelViewSet):
+    queryset = ComputerAgent.objects.all()
+    serializer_class = ComputerAgentSerializer
+
+
+from rest_framework.permissions import AllowAny
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Barcha foydalanuvchilar uchun ruxsat berish
+def register_computer(request):
+    mac_address = request.data.get("mac_address")  # MAC orqali tekshiramiz
+    if not mac_address:
+        return Response({"error": "MAC address required"}, status=400)
+
+    computer, created = ComputerAgent.objects.update_or_create(
+        mac_address=mac_address,  # Unikal maydon
+        defaults=request.data  # Barcha maydonlarni yangilash
+    )
+
+    message = "Computer registered successfully" if created else "Computer updated successfully"
+    return Response({"message": message}, status=201 if created else 200)

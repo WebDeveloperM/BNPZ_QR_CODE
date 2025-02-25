@@ -6,8 +6,14 @@ import { ModalComponent } from '../Modal/Modal';
 import axioss from '../../api/axios';
 import { GrEdit } from "react-icons/gr";
 import { Link } from 'react-router-dom';
+import DataTable from 'datatables.net-react';
+import DT from 'datatables.net-bs5';
+import BasicFilterDemo from './DataTable';
+
 
 const MainTable = () => {
+
+  DataTable.use(DT);
   const [data, setData] = useState<Compyuter[]>([])
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState("");
@@ -36,30 +42,29 @@ const MainTable = () => {
         </h4>
       </div>
 
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-1 flex items-center">
+      <div className="grid grid-cols-12 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+        <div className="sm:col-span-1 col-span-3  flex items-center ">
           <p className="text-base font-bold text-[#555] dark:text-white">QR Code</p>
         </div>
-        <div className="col-span-1 flex items-center sm:hidden ">
+        <div className="col-span-1 sm:flex items-center hidden ">
           <p className="text-base font-bold text-[#555] dark:text-white">Цехы</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="sm:col-span-1 col-span-5 flex items-center">
           <p className="text-base font-bold text-[#555] dark:text-white">Пользователь</p>
         </div>
-        <div className="col-span-1 flex items-center sm:hidden">
+        <div className="col-span-1 sm:flex items-center hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Зав. склад</p>
         </div>
-        <div className="col-span-1 flex items-center sm:hidden">
+        <div className="col-span-1 sm:flex items-center hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Тип орг.техники</p>
         </div>
-        <div className="col-span-1 flex items-center sm:hidden">
+        <div className="col-span-1 sm:flex items-center hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Процессор</p>
         </div>
-
-        <div className="col-span-1 flex items-center sm:hidden">
+        <div className="col-span-1 sm:flex items-center hidden">
           <p className="text-base font-bold text-[#555] dark:text-white">Активен</p>
         </div>
-        <div className="col-span-1 flex items-center">
+        <div className="sm:col-span-1 col-span-4 flex items-center">
           <p className="text-base font-bold text-[#555] dark:text-white">Действия</p>
         </div>
       </div>
@@ -67,42 +72,42 @@ const MainTable = () => {
       <div>
         {data && data.map((product, key) => (
           <div
-            className="grid grid-cols-6 border-t border-stroke pb-4 pt-2 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
+            className="grid grid-cols-12 border-t border-stroke pb-4 pt-2 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
             key={key}
           >
-            <div className="col-span-1 flex items-center">
+            <div className="sm:col-span-1 col-span-3 flex items-center">
               <div className="h-12.5 w-15">
                 <img src={`${BASE_IMAGE_URL}${product.qr_image}`} alt="Product" />
               </div>
             </div>
-            <div className="col-span-1 flex items-center ">
+            <div className="col-span-1 sm:flex items-center hidden ">
               <p className="text-sm text-black dark:text-white">
                 {product.departament.name}
               </p>
             </div>
-            <div className="col-span-1 flex items-center">
+            <div className="sm:col-span-1 col-span-5 flex items-center">
               <p className="text-sm text-black dark:text-white">
                 {product.user}
               </p>
             </div>
-            <div className="col-span-1 flex items-center">
+            <div className="col-span-1 sm:flex items-center hidden">
               <p className="text-sm text-black dark:text-white">{product.warehouse_manager.name}</p>
             </div>
-            <div className="col-span-1 flex items-center">
+            <div className="col-span-1 sm:flex items-center hidden">
               <p className="text-sm text-meta-3">{product.type_compyuter.name}</p>
             </div>
 
-            <div className="col-span-1 flex items-center">
+            <div className="col-span-1 sm:flex items-center hidden">
               <p className="text-sm text-meta-3">{product.CPU.name}</p>
             </div>
-            <div className="col-span-1 flex items-center">
+            <div className="col-span-1 sm:flex items-center hidden">
               <input type="checkbox"
                 disabled
                 checked={product.isActive}
                 className="w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:checked:bg-brand-500 dark:checked:border-brand-500 focus:ring-offset-0 focus:outline-none" />
             </div>
 
-            <div className="col-span-1 flex items-center">
+            <div className="sm:col-span-1 col-span-3 flex items-center">
               <div className="flex items-center space-x-3.5">
                 <button className="hover:text-primary"
                   onClick={() => {
@@ -169,9 +174,7 @@ const MainTable = () => {
         ))}
       </div>
 
-
-
-
+      {/* <BasicFilterDemo /> */}
 
       <ModalComponent openModal={openModal} setOpenModal={setOpenModal} modalData={modalData} />
 

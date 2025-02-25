@@ -52,7 +52,7 @@ export default function MultySelectTexnology({ label, selectData, selectedIdComp
             <Select
                 mode="multiple"
                 allowClear
-                style={{ width: '100%', height: "42px", marginTop: "3px" }}
+                style={{ width: '100%', marginTop: "3px" }}
                 placeholder={label}
                 showSearch
                 className={` dark:border-gray-600 dark:text-white border dark:placeholder-gray-400 dark:bg-gray-800 dark:focus:border-gray-500 rounded-lg ${error ? " border-red-500" : "border-gray-300"

@@ -12,7 +12,7 @@ import { isAuthenticated } from '../../utils/auth';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import EditCompyuterSeleced from '../../components/SelectedGroup/EditCompyuterSeleced';
-
+import { IoIosSave } from "react-icons/io";
 
 
 const EditCompyuter = () => {
@@ -184,7 +184,7 @@ const EditCompyuter = () => {
                 Введите компьютерные данные
               </h3>
               <ToastContainer />
-   
+
             </div>
             {
               data ?
@@ -332,7 +332,7 @@ const EditCompyuter = () => {
 
 
                       <div className='col-span-3'>
-                        {data && <AddCompyuterSelecedTexnology label='Модель вебкамеры' selectData={data.model_webcam} selectedTexnologyId={setModelWebcamId} selectedIdComp={compyuterDetailData?.model_webcam.id} isSubmitted={isSubmitted} />}
+                        {compyuterDetailData?.model_webcam  && <AddCompyuterSelecedTexnology label='Модель вебкамеры' selectData={data.model_webcam} selectedTexnologyId={setModelWebcamId} selectedIdComp={compyuterDetailData?.model_webcam.id} isSubmitted={isSubmitted} />}
                       </div>
 
                       <div className='col-span-3'>
@@ -351,17 +351,12 @@ const EditCompyuter = () => {
                         </label>
                       </div>
 
-                      <button type='submit' className="flex items-center justify-center gap-4 rounded-md bg-meta-3 py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-7" >
-                        <TbCloudPlus />
-                        Добовить
+                      <button type='submit' className="flex items-center justify-center gap-3 rounded-md bg-meta-3 py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-7" >
+                        <IoIosSave className='text-2xl' />
+                         Сохранить
                       </button>
 
                     </div>
-
-
-
-
-
 
                   </form>
 

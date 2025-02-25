@@ -98,7 +98,7 @@ export function ModalComponent({ openModal, setOpenModal, modalData }: Props) {
                                     {data && <ModalMultySelectInputTexnology label="Тип вебкамера" selectedIdComp={data.type_webcamera} />}
                                 </div>
 
-                                {data && <ModalDataInput label="Модель вебкамеры" inputData={data.model_webcam.name} />}
+                                {data?.model_webcam && <ModalDataInput label="Модель вебкамеры" inputData={data.model_webcam.name} />}
 
                                 <div className='col-span-3'>
                                     {data && <ModalMultySelectInputTexnology label="Тип Монитора" selectedIdComp={data.type_monitor} />}

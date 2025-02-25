@@ -20,6 +20,7 @@ import AddCompyuter from './pages/AddCompyuter/AddCompyuter';
 import 'antd/dist/reset.css';
 import { ToastContainer } from 'react-toastify';
 import EditCompyuter from './pages/EditCompyuter/EditCompyuter';
+import ViewCompyuter from './pages/ViewCompyuter/ViewCompyuter';
 
 
 function App() {
@@ -63,6 +64,15 @@ function App() {
             <>
               <PageTitle title="Редактирование компьютер" />
               <EditCompyuter />
+            </>
+          }
+        />
+        <Route
+          path={`/view-computer/:slug`}
+          element={
+            <>
+              <PageTitle title="Информация о компьютере" />
+              <ViewCompyuter />
             </>
           }
         />
