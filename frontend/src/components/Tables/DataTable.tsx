@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
@@ -8,19 +8,32 @@ import axioss from "../../api/axios";
 import { BASE_IMAGE_URL, BASE_URL } from "../../utils/urls";
 import { Link } from "react-router-dom";
 import { GrEdit } from "react-icons/gr";
+import { ModalDeleteComponent } from "../Modal/ModalDelete";
 
-export default function ComputerTable() {
+
+
+type Props = {
+    checkedComputer: Compyuter[],
+    setDeleteCompForChecked: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function ComputerTable({ checkedComputer, setDeleteCompForChecked }: Props) {
     const [computers, setComputers] = useState<Compyuter[]>([]);
-    const [data, setData] = useState<Compyuter[]>([])
     const [openDeleteModal, setDeleteOpenModal] = useState(false);
     const [deleteModalData, setDeleteModalData] = useState("");
     const [deleteCompData, setDeleteCompData] = useState(false);
+
+    useEffect(() => {
+        setComputers(checkedComputer.map(comp => ({ ...comp }))); // Yangi obyekt yaratish
+        setDeleteCompForChecked(deleteCompData);
+    }, [checkedComputer]);
+
 
     const [filters, setFilters] = useState({
         global: { value: "", matchMode: FilterMatchMode.CONTAINS },
         "departament.name": { value: null, matchMode: FilterMatchMode.CONTAINS },
         "user": { value: null, matchMode: FilterMatchMode.CONTAINS },
-        "ipadrsss": { value: null, matchMode: FilterMatchMode.CONTAINS },
+        "ipadresss": { value: null, matchMode: FilterMatchMode.CONTAINS },
         "type_compyuter.name": { value: null, matchMode: FilterMatchMode.CONTAINS }
     });
 
@@ -103,6 +116,13 @@ export default function ComputerTable() {
         </div>;
     };
 
+    const typeComputerBodyTemplate = (rowData: Compyuter) => {
+        return (
+            <a href={`/view-computer/${rowData.slug}`} className="text-blue-600 hover:underline">
+                {rowData.type_compyuter.name}
+            </a>
+        );
+    };
 
     return (
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -131,15 +151,22 @@ export default function ComputerTable() {
                         🚫 Данные не найдены
                     </div>
                 }
-                globalFilterFields={["departament.name", "user", "ipadresss", "mac_adress"]} rowClassName={() => "border-b border-gray-300"} className="p-3  bg-white ">
-                <Column field="qr_image" header="Qr_code" body={qrCodeBodyTemplate} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", paddingLeft: "10px", color: "black" }} />
-                <Column field="departament.name" header="Цехы" filter filterPlaceholder="Поиск по цехы" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
-                <Column field="user" header="Пользователь" filter filterPlaceholder="Поиск по пользователь" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
-                <Column field="type_compyuter.name" header="Тип орг.техники" filter filterPlaceholder="Поиск по тип орг.техники" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
-                <Column field="ipadresss" header="IP аддрес" filter filterPlaceholder="Поиск по IP аддрес" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
-                <Column field="isActive" header="Активен" body={isActiveBodyTemplate} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
-                <Column field="actions" header="Действия" body={isDetail} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
+                globalFilterFields={["departament.name", "user", "type_compyuter.name", "ipadresss"]} rowClassName={() => "border border-gray-300"} className="p-3  bg-white table-border">
+                <Column field="qr_image" header="Qr_code" body={qrCodeBodyTemplate} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", paddingLeft: "10px", color: "black", border: "1px solid #c8c5c4" }} />
+                <Column field="departament.name" header="Цехы" filter filterPlaceholder="Поиск по цехы" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', border: "1px solid #c8c5c4", backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
+                <Column field="user" header="Пользователь" filter filterPlaceholder="Поиск по пользователь" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', border: "1px solid #c8c5c4", backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
+                <Column field="type_compyuter.name" body={typeComputerBodyTemplate} header="Тип орг.техники" filter filterPlaceholder="Поиск по тип орг.техники" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', border: "1px solid #c8c5c4", backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black" }} />
+                <Column field="ipadresss" header="IP аддрес" filter filterPlaceholder="Поиск по IP аддрес" showFilterMenuOptions={false} showApplyButton={false} showClearButton={false} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', border: "1px solid #c8c5c4", textAlign: 'center', padding: "10px", color: "black" }} />
+                <Column field="isActive" header="Активен" body={isActiveBodyTemplate} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black", border: "1px solid #c8c5c4" }} />
+                <Column field="actions" header="Действия" body={isDetail} headerStyle={{ fontWeight: 'bold', backgroundColor: '#f8f9fa', textAlign: 'center', padding: "10px", color: "black", border: "1px solid #c8c5c4" }} />
             </DataTable>
+
+            <div className="font-semibold p-5 pt-0">
+                Общее количество: {computers.length}
+            </div>
+
+            <ModalDeleteComponent openDeleteModal={openDeleteModal} setDeleteOpenModal={setDeleteOpenModal} deleteModalData={deleteModalData} setDeleteCompData={setDeleteCompData} deleteCompData={deleteCompData} />
+
         </div>
     );
 }

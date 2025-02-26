@@ -194,7 +194,7 @@ class FilterDataByIPApiView(APIView):
             return Response({"error": "Invalid key value"}, status=400)
 
         # Kompyuterlar ro'yxatini serializer orqali qaytarish
-        serializer = AddCompyuterSerializer(computers, many=True)
+        serializer = CompyuterSerializer(computers, many=True)
         return Response(serializer.data)
 
 

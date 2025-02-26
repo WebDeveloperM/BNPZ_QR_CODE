@@ -213,3 +213,8 @@ span.flatpickr-weekday,
 [x-cloak] {
   display: none !important;
 }
+
+
+.custom-select .ant-select-disabled .ant-select-selector {
+  background-color: red !important;
+}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import CardDataStats from '../../components/CardDataStats';
-import MainTable from '../../components/Tables/MainTable';
 import { BASE_URL } from '../../utils/urls';
 import { Compyuter, InfoComputerData } from '../../types/compyuters';
 import axioss from '../../api/axios';
@@ -14,12 +13,14 @@ import ComputerTable from '../../components/Tables/DataTable';
 
 const Main: React.FC = () => {
   const [data, setData] = useState<Compyuter[] | null>()
+  const [computerData, setComputerData] = useState<Compyuter[]>([])
   const [selectKey, setSelectKey] = useState<string | null>("")
+  const [deleteCompForChecked, setDeleteCompForChecked] = useState<boolean>(false)
   const [infoCompData, setInfoCompData] = useState<InfoComputerData | null>()
   const token = localStorage.getItem('token')
 
-  console.log(selectKey, "2222222222222233333333333333333333333");
-  
+  console.log(deleteCompForChecked, "5555555555555555666666666666666666666");
+
   useEffect(() => {
     if (!token) return
     axioss
@@ -39,12 +40,13 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     axioss
-      .post(`${BASE_URL}/filter-data/`, {key: selectKey})
+      .post(`${BASE_URL}/filter-data/`, { key: selectKey })
       .then((response) => {
-        setData(response.data);
+        console.log("Serverdan kelgan ma'lumot:", response.data); 
+        setComputerData(response.data);
       })
       .catch((err) => console.log(err));
-  }, [selectKey]);
+  }, [selectKey, deleteCompForChecked]);
 
   console.log(data, "666666666666");
 
@@ -79,7 +81,7 @@ const Main: React.FC = () => {
 
           <div className='mt-6'>
             {/* <MainTable /> */}
-            <ComputerTable />
+            <ComputerTable checkedComputer={computerData} setDeleteCompForChecked={setDeleteCompForChecked} />
           </div>
         </> :
         <div className='flex justify-center mt-[10%]'>

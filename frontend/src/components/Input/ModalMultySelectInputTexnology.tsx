@@ -30,9 +30,10 @@ export default function ModalMultySelectInputTexnology({ label, selectedIdComp }
                 showSearch
                 optionFilterProp="label"
                 disabled
-                defaultValue={defaultValues} // ✅ Tanlangan qiymatlar
-                // className="dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-500"
+                defaultValue={defaultValues}
+                className="custom-select" // ✅ CSS qo‘llash uchun class
             />
+
         </Space>
     );
 }

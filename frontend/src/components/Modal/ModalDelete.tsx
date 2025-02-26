@@ -1,7 +1,6 @@
 
 "use client";
 
-import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 import { BASE_URL } from "../../utils/urls";
