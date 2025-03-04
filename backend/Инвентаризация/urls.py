@@ -5,6 +5,7 @@ from .models import register_computer
 urlpatterns = [
     path("all_compyuters/", CoreApiView.as_view()),
     path("all_texnology/", TexnologyApiView.as_view()),
+    path("get-data-from-agent/", GetTexnologyFromAgent.as_view()),
     path("comp_detail/<slug:slug>", CompDetailApiView.as_view()),
     path("comp_delete/<slug:slug>", CompDeleteApiView.as_view()),
     path("info-comp/", InfoCompyuterApiView.as_view()),

@@ -100,7 +100,7 @@ class Frequency(models.Model):
 
 
 class HDD(models.Model):
-    name = models.CharField(max_length=255, default="Нет", verbose_name='Название')
+    name = models.CharField(max_length=255, default=None, verbose_name='Название')
 
     def __str__(self):
         return self.name
@@ -111,7 +111,7 @@ class HDD(models.Model):
 
 
 class SSD(models.Model):
-    name = models.CharField(max_length=255, default="Нет", verbose_name='Название')
+    name = models.CharField(max_length=255, default=None, verbose_name='Название')
 
     def __str__(self):
         return self.name
@@ -225,34 +225,38 @@ class Compyuter(models.Model):
     departament = models.ForeignKey('Department', on_delete=models.CASCADE)
     user = models.CharField(max_length=255, verbose_name='Пользователь')
     warehouse_manager = models.ForeignKey(WarehouseManager, on_delete=models.CASCADE, verbose_name='Зав. склада')
-    type_compyuter = models.ForeignKey(TypeCompyuter, on_delete=models.CASCADE, verbose_name='Тип орг.техники')
-    motherboard = models.ForeignKey(Motherboard, on_delete=models.CASCADE, verbose_name='Производитель МП')
-    motherboard_model = models.ForeignKey(MotherboardModel, on_delete=models.CASCADE, verbose_name='Модель МП')
-    CPU = models.ForeignKey(CPU, on_delete=models.CASCADE, verbose_name='Процессор')
-    generation = models.ForeignKey(Generation, on_delete=models.CASCADE, verbose_name='Поколение процессора')
-    frequency = models.ForeignKey(Frequency, on_delete=models.CASCADE, verbose_name='Частота процессора')
+    type_compyuter = models.ForeignKey(TypeCompyuter, on_delete=models.CASCADE, verbose_name='Тип орг.техники',
+                                       default=None)
+    motherboard = models.ForeignKey(Motherboard, on_delete=models.CASCADE, verbose_name='Производитель МП',
+                                    default=None)
+    motherboard_model = models.ForeignKey(MotherboardModel, on_delete=models.CASCADE, verbose_name='Модель МП',
+                                          default=None)
+    CPU = models.ForeignKey(CPU, on_delete=models.CASCADE, verbose_name='Процессор', default=None)
+    generation = models.ForeignKey(Generation, on_delete=models.CASCADE, verbose_name='Поколение процессора',
+                                   default=None)
+    frequency = models.ForeignKey(Frequency, on_delete=models.CASCADE, verbose_name='Частота процессора', default=None)
     HDD = models.ForeignKey(HDD, on_delete=models.CASCADE, verbose_name='Диск  HDD')
     SSD = models.ForeignKey(SSD, on_delete=models.CASCADE, verbose_name='Диск  SSD')
     disk_type = models.ForeignKey(DiskType, on_delete=models.CASCADE, verbose_name='Тип диска')
-    RAM_type = models.ForeignKey(RAMType, on_delete=models.CASCADE, verbose_name='Тип оперативки')
-    RAMSize = models.ForeignKey(RAMSize, on_delete=models.CASCADE, verbose_name='Размер оперативной памяти')
-    GPU = models.ForeignKey(GPU, on_delete=models.CASCADE, verbose_name='Видеокарта', null=True, blank=True)
-    ipadresss = models.CharField(max_length=255, verbose_name='IPv4 адрес', null=True, blank=True)
-    mac_adress = models.CharField(max_length=255, verbose_name='Физический(MAC) адрес', null=True, blank=True)
-    printer = models.ManyToManyField(Printer, blank=True, verbose_name='Принтеры', related_name="printer")
-    scaner = models.ManyToManyField(Scaner, blank=True, verbose_name='Сканеры', related_name="scaner")
-    type_webcamera = models.ManyToManyField(TypeWebCamera, blank=True, related_name="typeCamera",
+    RAM_type = models.ForeignKey(RAMType, on_delete=models.CASCADE, verbose_name='Тип оперативки', default=None)
+    RAMSize = models.ForeignKey(RAMSize, on_delete=models.CASCADE, verbose_name='Размер оперативной памяти',
+                                default=None)
+    GPU = models.ForeignKey(GPU, on_delete=models.CASCADE, verbose_name='Видеокарта', default=None)
+    ipadresss = models.CharField(max_length=255, verbose_name='IPv4 адрес', default=None)
+    mac_adress = models.CharField(max_length=255, verbose_name='Физический(MAC) адрес', default=None)
+    printer = models.ManyToManyField(Printer, verbose_name='Принтеры', related_name="printer")
+    scaner = models.ManyToManyField(Scaner, verbose_name='Сканеры', related_name="scaner")
+    type_webcamera = models.ManyToManyField(TypeWebCamera, related_name="typeCamera",
                                             verbose_name='Тип вебкамера')
-    model_webcam = models.ForeignKey(ModelWebCamera, on_delete=models.CASCADE, verbose_name='Модель вебкамеры',
-                                     null=True, blank=True)
-    type_monitor = models.ManyToManyField(Monitor, blank=True, related_name="typeMonitor", verbose_name='Тип Монитора')
-
-    qr_image = models.ImageField(upload_to='qr_codes/', verbose_name='QR-код', null=True, blank=True)
-    signature = models.ImageField(upload_to='signature/', verbose_name='', null=True, blank=True)
+    model_webcam = models.ForeignKey(ModelWebCamera, on_delete=models.CASCADE, verbose_name='Модель вебкамеры')
+    type_monitor = models.ManyToManyField(Monitor, related_name="typeMonitor", verbose_name='Тип Монитора',
+                                          default=None)
+    qr_image = models.ImageField(upload_to='qr_codes/', verbose_name='QR-код', )
+    signature = models.ImageField(upload_to='signature/')
     joinDate = models.DateTimeField(auto_now=True, null=False, verbose_name="Дате")
-    addedUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Сотрудник")
-    updatedUser = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
-                                    related_name="updated_computers", verbose_name="Изменил")
+    addedUser = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Сотрудник", null=True)
+    updatedUser = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="updated_computers",
+                                    verbose_name="Изменил", null=True)
     updatedAt = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
 
     slug = models.SlugField(unique=True, blank=True)

@@ -1,4 +1,3 @@
-import { SelectAllLabel } from 'antd/es/transfer';
 import React, { ReactNode } from 'react';
 
 interface CardDataStatsProps {
@@ -15,7 +14,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   children,
 }) => {
   return (
-    <div onClick={() => setSelectKey(title)} className="rounded-sm border hover:cursor-pointer border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div onClick={() => setSelectKey(title)} className="rounded-sm border hover:scale-105 duration-200 hover:cursor-pointer border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
         {children}
       </div>
@@ -26,10 +25,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
             {total}
           </h4>
           <span className="text-sm font-medium hover:underline cursor-pointer">{title}</span>
-
         </div>
-
-
       </div>
     </div>
   );
