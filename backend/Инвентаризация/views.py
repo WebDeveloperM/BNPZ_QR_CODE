@@ -375,3 +375,5 @@ def upload_excel(request):
             messages.error(request, f"❌ Xatolik: {e}")
         return redirect("upload-excel")
     return render(request, "upload.html")
+
+

@@ -10,6 +10,7 @@ import { AiOutlinePrinter } from "react-icons/ai"
 import { MdOutlineAdfScanner } from "react-icons/md";
 import { RiWebcamLine } from "react-icons/ri";
 import ComputerTable from '../../components/Tables/DataTable';
+import Skeleton from '../../components/Skeleton/Skeleton';
 
 const Main: React.FC = () => {
   const [data, setData] = useState<Compyuter[] | null>()
@@ -18,8 +19,6 @@ const Main: React.FC = () => {
   const [deleteCompForChecked, setDeleteCompForChecked] = useState<boolean>(false)
   const [infoCompData, setInfoCompData] = useState<InfoComputerData | null>()
   const token = localStorage.getItem('token')
-
-  console.log(deleteCompForChecked, "5555555555555555666666666666666666666");
 
   useEffect(() => {
     if (!token) return
@@ -42,13 +41,11 @@ const Main: React.FC = () => {
     axioss
       .post(`${BASE_URL}/filter-data/`, { key: selectKey })
       .then((response) => {
-        console.log("Serverdan kelgan ma'lumot:", response.data); 
+        console.log("Serverdan kelgan ma'lumot:", response.data);
         setComputerData(response.data);
       })
       .catch((err) => console.log(err));
   }, [selectKey, deleteCompForChecked]);
-
-  console.log(data, "666666666666");
 
 
 
@@ -84,12 +81,23 @@ const Main: React.FC = () => {
             <ComputerTable checkedComputer={computerData} setDeleteCompForChecked={setDeleteCompForChecked} />
           </div>
         </> :
-        <div className='flex justify-center mt-[10%]'>
-          <div className='text-center'>
-            <h1 className='text-5xl font-semibold mb-2'>Oшибка 500</h1>
-            <p className='text-2xl'>(Internal Server Error)</p>
+
+        <div className='grid grid-cols-12'>
+          <div className='col-span-3 '>
+            <Skeleton />
           </div>
+          <div className='col-span-3 '>
+            <Skeleton />
+          </div>
+          <div className='col-span-3 '>
+            <Skeleton />
+          </div>
+          <div className='col-span-3 '>
+            <Skeleton />
+          </div>
+
         </div>
+
       }
 
 

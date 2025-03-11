@@ -5,8 +5,11 @@ import qrcode
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from crum import get_current_user
-
+from rest_framework.permissions import AllowAny
+from rest_framework import serializers, viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from django.core.exceptions import ValidationError
 from Инвентаризация.middleware import CurrentUserMiddleware
 
 
@@ -220,9 +223,55 @@ class RAMType(models.Model):
         verbose_name_plural = '2.5 Тип оперативки'
 
 
+class ProgramLicense(models.Model):
+    license_pdf = models.FileField(verbose_name="Лицензии PDF")
+    begin_date = models.DateField(verbose_name="Дата начала лицензии")
+    finish_date = models.DateField(verbose_name="Дата окончания лицензии")
+
+    def __str__(self):
+        return f"Дата начала: {self.begin_date}, Дата окончания: {self.finish_date}"
+
+    class Meta:
+        verbose_name = 'Программа лицензии '
+        verbose_name_plural = 'Программа лицензии'
+
+
+class Program(models.Model):
+    CHOICES_LITCENSE = [
+        ("license", "Лицензированный"),
+        ("no-license", "Не лицензированный"),
+    ]
+    CHOICES_PROGRAM_TYPE = [
+        ("systemic", "Системная"),
+        ("additional", "Дополнительные"),
+    ]
+
+    license_type = models.CharField(max_length=255, choices=CHOICES_LITCENSE, verbose_name="Cтатус лицензии")
+    license_data = models.ForeignKey(ProgramLicense, on_delete=models.CASCADE, verbose_name="Инфо лицензии", null=True,
+                                     blank=True)
+    type = models.CharField(max_length=255, choices=CHOICES_PROGRAM_TYPE, verbose_name="Тип программы")
+    title = models.CharField(max_length=255, verbose_name="Название программы")
+    version = models.CharField(max_length=255, verbose_name="Версия программы")
+
+    def __str__(self):
+        return f"{self.title}, Версия: {self.version}, Лицензии: {self.license_type.title()}"
+
+    def clean(self):
+        if self.license_type == "license" and not self.license_data:
+            raise ValidationError({"license_data": "Для лицензированных программ требуется информация о лицензии."})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Программа '
+        verbose_name_plural = 'Программа'
+
+
 class Compyuter(models.Model):
     seal_number = models.CharField(max_length=255, verbose_name='Номер пломбы')
-    departament = models.ForeignKey('Department', on_delete=models.CASCADE)
+    departament = models.ForeignKey('Department', on_delete=models.CASCADE, verbose_name="Цех")
     user = models.CharField(max_length=255, verbose_name='Пользователь')
     warehouse_manager = models.ForeignKey(WarehouseManager, on_delete=models.CASCADE, verbose_name='Зав. склада')
     type_compyuter = models.ForeignKey(TypeCompyuter, on_delete=models.CASCADE, verbose_name='Тип орг.техники',
@@ -244,15 +293,17 @@ class Compyuter(models.Model):
     GPU = models.ForeignKey(GPU, on_delete=models.CASCADE, verbose_name='Видеокарта', default=None)
     ipadresss = models.CharField(max_length=255, verbose_name='IPv4 адрес', default=None)
     mac_adress = models.CharField(max_length=255, verbose_name='Физический(MAC) адрес', default=None)
-    printer = models.ManyToManyField(Printer, verbose_name='Принтеры', related_name="printer")
-    scaner = models.ManyToManyField(Scaner, verbose_name='Сканеры', related_name="scaner")
+    printer = models.ManyToManyField(Printer, verbose_name='Принтеры', related_name="printer", blank=True)
+    scaner = models.ManyToManyField(Scaner, verbose_name='Сканеры', related_name="scaner", blank=True)
     type_webcamera = models.ManyToManyField(TypeWebCamera, related_name="typeCamera",
-                                            verbose_name='Тип вебкамера')
-    model_webcam = models.ForeignKey(ModelWebCamera, on_delete=models.CASCADE, verbose_name='Модель вебкамеры')
+                                            verbose_name='Тип вебкамера', blank=True)
+    model_webcam = models.ForeignKey(ModelWebCamera, on_delete=models.CASCADE, verbose_name='Модель вебкамеры',
+                                     null=True, blank=True)
     type_monitor = models.ManyToManyField(Monitor, related_name="typeMonitor", verbose_name='Тип Монитора',
-                                          default=None)
-    qr_image = models.ImageField(upload_to='qr_codes/', verbose_name='QR-код', )
-    signature = models.ImageField(upload_to='signature/')
+                                          blank=True)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, verbose_name='Программы', null=True, blank=True)
+    qr_image = models.ImageField(upload_to='qr_codes/', verbose_name='QR-код', null=True, blank=True)
+    bg_image = models.ImageField(default="back.jpg", verbose_name='QR-код', null=True, blank=True)
     joinDate = models.DateTimeField(auto_now=True, null=False, verbose_name="Дате")
     addedUser = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Сотрудник", null=True)
     updatedUser = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="updated_computers",
@@ -266,26 +317,15 @@ class Compyuter(models.Model):
         return self.user
 
     def save(self, *args, **kwargs):
-        user = CurrentUserMiddleware.get_current_user()  # Hozirgi foydalanuvchini olish
+        user = CurrentUserMiddleware.get_current_user()
         if user and user.is_authenticated:
-            self.updatedUser = user  # O‘zgartirgan foydalanuvchini qo‘shish
+            self.updatedUser = user
 
-        # Slug va QR kodni yaratishdan oldin saqlash
-        if not self.slug:  # Agar `id` bo‘lmasa, birinchi marta saqlash
-            # Slug maydonini yangilash
+        if not self.slug:
             if not self.slug:
                 self.slug = slugify(f"computer-{self.seal_number}")
 
             super().save(*args, **kwargs)  # Birinchi marta saqlash
-
-    #
-    #     # Generatsiya qilgan QR kodini saqlash
-    #     if not self.qr_image:
-    #         self.generate_qr()
-    #         super().save(update_fields=["qr_image"])  # Faqat `qr_image`ni yangilash
-    #
-    #     # Oxirgi saqlash: agar boshqa o‘zgarishlar bo‘lsa
-    #     super().save(*args, **kwargs)  # Faqat oxirgi safar saqlanadi
 
     def save(self, *args, **kwargs):
         user = CurrentUserMiddleware.get_current_user()  # Hozirgi foydalanuvchini olish
@@ -327,11 +367,6 @@ class Compyuter(models.Model):
         verbose_name_plural = 'Компьютеры'
 
 
-from rest_framework import serializers, viewsets
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-
-
 class ComputerAgent(models.Model):
     username = models.CharField(max_length=100)
     ip_address = models.GenericIPAddressField()
@@ -358,9 +393,6 @@ class ComputerAgentSerializer(serializers.ModelSerializer):
 class ComputerViewSet(viewsets.ModelViewSet):
     queryset = ComputerAgent.objects.all()
     serializer_class = ComputerAgentSerializer
-
-
-from rest_framework.permissions import AllowAny
 
 
 @api_view(['POST'])

@@ -1,10 +1,13 @@
 from django.contrib import admin
 from .models import *
+
 # Register your models here.
 
 
 admin.site.register(Department)
 admin.site.register(ComputerAgent)
+admin.site.register(ProgramLicense)
+
 
 @admin.register(Compyuter)
 class CompyuterAdmin(admin.ModelAdmin):
@@ -28,15 +31,15 @@ class CompyuterAdmin(admin.ModelAdmin):
         'ipadresss',
         'mac_adress',
         'model_webcam',
+        'program',
         'qr_image',
-        'signature',
         'joinDate',
         'addedUser',
         'updatedUser',
         'updatedAt',
         'isActive',
-        )
-    
+    )
+
     fields = (
         'seal_number',
         'departament',
@@ -60,11 +63,11 @@ class CompyuterAdmin(admin.ModelAdmin):
         'scaner',
         'type_webcamera',
         'model_webcam',
+        'program',
         'type_monitor',
         'slug',
         'isActive'
-        )
-    
+    )
 
     search_fields = ('seal_number', 'departament')
 
@@ -92,3 +95,4 @@ admin.site.register(ModelWebCamera)
 admin.site.register(Monitor)
 admin.site.register(Printer)
 admin.site.register(Scaner)
+admin.site.register(Program)

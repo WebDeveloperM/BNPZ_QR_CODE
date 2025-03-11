@@ -22,13 +22,13 @@ export default function MultySelectTexnology({ label, selectData, selectedIdComp
     // **State to control selected values**
     const [selectedValues, setSelectedValues] = useState<number[]>([]);
 
-    useEffect(() => {
-        if (isSubmitted && selectedValues.length === 0) {
-            setError("Обязательное поле"); // Agar hech narsa tanlanmagan bo‘lsa, xatolik qo‘shiladi
-        } else {
-            setError(null); // Aks holda xatolik yo‘qoladi
-        }
-    }, [isSubmitted, selectedValues]);
+    // useEffect(() => {
+    //     if (isSubmitted && selectedValues.length === 0) {
+    //         setError("Обязательное поле"); // Agar hech narsa tanlanmagan bo‘lsa, xatolik qo‘shiladi
+    //     } else {
+    //         setError(null); // Aks holda xatolik yo‘qoladi
+    //     }
+    // }, [isSubmitted, selectedValues]);
 
 
     // **Sync state with props when component mounts or props change**
