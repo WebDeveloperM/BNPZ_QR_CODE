@@ -17,8 +17,9 @@ from django.db.models import Count
 
 
 class TexnologyApiView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     @staticmethod
     def get(request, *args, **kwargs):
@@ -41,7 +42,16 @@ class TexnologyApiView(APIView):
         type_webcamera = TypeWebCameraSerializer(TypeWebCamera.objects.all(), many=True).data
         model_webcam = ModelWebCameraSerializer(ModelWebCamera.objects.all(), many=True).data
         type_monitor = MonitorSerializer(Monitor.objects.all(), many=True).data
+        program_with_license_and_systemic = ProgramSerializer(Program.objects.filter(license_type='license', type='systemic'), many=True).data
+        program_with_license_and_additional = ProgramSerializer(Program.objects.filter(license_type='license', type='additional'), many=True).data
+        program_with_no_license_and_systemic = ProgramSerializer(Program.objects.filter(license_type='no-license', type='systemic'), many=True).data
+        program_with_no_license_and_additional = ProgramSerializer(Program.objects.filter(license_type='no-license', type='additional'), many=True).data
 
+
+        print(program_with_license_and_systemic)
+        print(program_with_license_and_additional)
+        print(program_with_no_license_and_systemic)
+        print(program_with_no_license_and_additional)
         data = {
             'departament': departament,
             'warehouse_manager': warehouse_manager,
@@ -62,7 +72,10 @@ class TexnologyApiView(APIView):
             'type_webcamera': type_webcamera,
             'model_webcam': model_webcam,
             'type_monitor': type_monitor,
-
+            'program_with_license_and_systemic': program_with_license_and_systemic,
+            'program_with_license_and_additional':program_with_license_and_additional,
+            'program_with_no_license_and_systemic':program_with_no_license_and_systemic,
+            'program_with_no_license_and_additional':program_with_no_license_and_additional
         }
 
         return Response(data)
@@ -120,25 +133,12 @@ class InfoCompyuterApiView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-
         all_compyuters = Compyuter.objects.filter(isActive=True).count()
-        # all_compyuters_with_printer = Compyuter.objects.annotate(printer_count=Count('printer')).filter(printer_count__gt=0).count()
-        # all_compyuters_with_scaner = Compyuter.objects.annotate(scaner_count=Count('scaner')).filter(scaner_count__gt=0).count()
-        # all_compyuters_with_scaner = Compyuter.objects.annotate(type_webcamera_count=Count('type_webcamera')).filter(type_webcamera_count__gt=0).count()
-        # all_compyuters_with_webcam = Compyuter.objects.annotate(model_webcam_count=Count('model_webcam')).filter(model_webcam_count__gt=0).count()
-        # all_compyuters_with_scaner = Compyuter.objects.filter(scaner=True).count()
-
         all_compyuters_with_printer = Compyuter.objects.filter(isActive=True, printer__isnull=False).distinct().count()
-
-        # Skaneri bor kompyuterlar soni (har bir kompyuter faqat bir marta hisoblanadi)
         all_compyuters_with_scaner = Compyuter.objects.filter(isActive=True, scaner__isnull=False).distinct().count()
 
-        # Veb-kamerasi bor kompyuterlar soni (har bir kompyuter faqat bir marta hisoblanadi)
         all_compyuters_with_webcam = Compyuter.objects.filter(isActive=True,
                                                               type_webcamera__isnull=False).distinct().count()
-
-        # all_compyuters_with_webcam = Compyuter.objects.filter(type_webcamera__isnull=False).count()
-
         info = {
             "all_compyuters_count": all_compyuters,
             "all_compyuters_with_printer": all_compyuters_with_printer,
@@ -170,7 +170,6 @@ def get_or_create_model(model, field_name, value):
         return None
     obj, created = model.objects.get_or_create(**{field_name: value})
     return obj
-
 
 
 # class GetTexnologyFromAgent(APIView):
@@ -243,6 +242,8 @@ def get_or_create_model(model, field_name, value):
 #             field.set(model.objects.filter(name__in=names.split(", ")))
 
 from django.db import transaction
+
+
 class GetTexnologyFromAgent(APIView):
     permission_classes = [AllowAny]
 
@@ -303,7 +304,6 @@ class GetTexnologyFromAgent(APIView):
             comp.save()
 
         return Response({"message": "OK", "created": created})
-
 
 
 class FilterDataByIPApiView(APIView):
@@ -375,5 +375,3 @@ def upload_excel(request):
             messages.error(request, f"❌ Xatolik: {e}")
         return redirect("upload-excel")
     return render(request, "upload.html")
-
-

@@ -301,7 +301,7 @@ class Compyuter(models.Model):
                                      null=True, blank=True)
     type_monitor = models.ManyToManyField(Monitor, related_name="typeMonitor", verbose_name='Тип Монитора',
                                           blank=True)
-    program = models.ForeignKey(Program, on_delete=models.CASCADE, verbose_name='Программы', null=True, blank=True)
+    program = models.ManyToManyField(Program, verbose_name='Программы', blank=True)
     qr_image = models.ImageField(upload_to='qr_codes/', verbose_name='QR-код', null=True, blank=True)
     bg_image = models.ImageField(default="back.jpg", verbose_name='QR-код', null=True, blank=True)
     joinDate = models.DateTimeField(auto_now=True, null=False, verbose_name="Дате")

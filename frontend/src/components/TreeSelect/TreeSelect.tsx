@@ -13,23 +13,17 @@ export interface WorkerData {
 }
 
 interface TreeSelectComponentProps {
-    data: {
-        uz: WorkerDataByLanguage
-        rus: WorkerDataByLanguage
-    }
-    language: "uz" | "rus" // Tanlangan til
-    placeholder?: string // Tanlov matni
-    onChange: (selected: number[]) => void // Tanlangan IDs
+
+    
+   
 }
 
 const TreeSelectComponent: React.FC<TreeSelectComponentProps> = ({
-    data = { uz: {}, rus: {} }, // Default qiymat
-    language,
-    placeholder,
-    onChange,
+    data,
+    placeholder, 
 }) => {
     const treeData = useMemo(() => {
-        const workerData = data[language]
+        const workerData = data
         if (!workerData || Object.keys(workerData).length === 0) {
             return [] // Agar ma'lumot bo'lmasa, bo'sh array qaytariladi
         }
@@ -43,7 +37,7 @@ const TreeSelectComponent: React.FC<TreeSelectComponentProps> = ({
                 key: item.id,
             })),
         }))
-    }, [data, language])
+    }, [data])
 
     const [value, setValue] = useState<number[]>([])
 

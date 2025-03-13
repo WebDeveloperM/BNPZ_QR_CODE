@@ -20,6 +20,7 @@ class WarehouseManagerSerializer(serializers.ModelSerializer):
         model = WarehouseManager
         fields = "__all__"
 
+
 class MotherboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Motherboard
@@ -98,7 +99,6 @@ class ModelWebCameraSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class DiskTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiskType
@@ -116,13 +116,25 @@ class MonitorSerializer(serializers.ModelSerializer):
         model = Monitor
         fields = "__all__"
 
-class AddCompyuterSerializer(serializers.ModelSerializer):
 
+class AddCompyuterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Compyuter
         fields = "__all__"
 
 
+class ProgramLicenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProgramLicense
+        fields = "__all__"
+
+
+class ProgramSerializer(serializers.ModelSerializer):
+    license_data = ProgramLicenseSerializer()
+
+    class Meta:
+        model = Program
+        fields = "__all__"
 
 
 class CompyuterSerializer(serializers.ModelSerializer):
@@ -138,13 +150,14 @@ class CompyuterSerializer(serializers.ModelSerializer):
     SSD = SSDSerializer()
     disk_type = DiskTypeSerializer()
     RAM_type = RAMTypeSerializer()
-    RAMSize =  RAMSizeSerializer()
+    RAMSize = RAMSizeSerializer()
     GPU = GPUSerializer()
     printer = PrinterSerializer(many=True, read_only=True)
     scaner = ScanerSerializer(many=True, read_only=True)
     type_webcamera = TypeWebCameraSerializer(many=True, read_only=True)
     model_webcam = ModelWebCameraSerializer()
     type_monitor = MonitorSerializer(many=True, read_only=True)
+    program = ProgramSerializer()
     isActive = serializers.BooleanField(read_only=True)
 
     class Meta:

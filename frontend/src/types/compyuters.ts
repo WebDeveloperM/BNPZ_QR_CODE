@@ -67,7 +67,7 @@ export type Compyuter = {
     printer: GenericType[],
 
     scaner: GenericType[],
-
+    
     type_webcamera: GenericType[],
 
     model_webcam: {
